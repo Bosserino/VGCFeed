@@ -1,0 +1,15 @@
+# Metti qui una URL RSS per riga (gli account X che vuoi seguire).
+# Le righe che iniziano con # sono ignorate (commenti).
+#
+# Usa un servizio RSS che converte gli account X in feed. Esempi di formato
+# (sostituisci NOMEACCOUNT con lo username X senza @):
+#
+#   https://NOME-ISTANZA-NITTER/NOMEACCOUNT/rss
+#   https://rsshub.app/twitter/user/NOMEACCOUNT
+#
+# IMPORTANTE: le istanze pubbliche gratuite cambiano spesso. Se un feed smette
+# di funzionare, sostituisci l'indirizzo con un'istanza attiva (vedi README).
+#
+# --- ESEMPI (decommenta e modifica) ---
+# https://rsshub.app/twitter/user/nasa
+# https://nitter.esmailelbob.xyz/nasa/rss
