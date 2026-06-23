@@ -74,7 +74,7 @@ def save_seen(seen):
 
 def load_accounts():
     try:
-        with open(ACCOUNTS_FILE, "r", encoding="utf-8-sig") as f::
+        with open(ACCOUNTS_FILE, "r", encoding="utf-8-sig") as f:
             lines = [ln.strip().lstrip("@") for ln in f]
     except FileNotFoundError:
         return []
