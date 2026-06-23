@@ -21,7 +21,7 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Debug accounts
+   - name: Debug accounts
         run: |
           echo "--- hex dump prime 5 righe ---"
           head -5 accounts.txt | xxd
