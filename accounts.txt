@@ -1,0 +1,7 @@
+# Metti qui gli account X da seguire: UNO USERNAME PER RIGA, senza @.
+# Il bot leggera' la loro MEDIA TAB (solo post con foto/video).
+# Le righe che iniziano con # sono ignorate (commenti).
+#
+# Esempio:
+# UB_SLOW
+# nasa

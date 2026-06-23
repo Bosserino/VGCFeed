@@ -1,5 +1,4 @@
+twscrape
 requests
-feedparser
-beautifulsoup4
 deep-translator
 langdetect

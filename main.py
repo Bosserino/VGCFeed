@@ -1,28 +1,30 @@
 """
-Bot che legge i feed RSS di account X (Twitter), prende i post con
-immagini/video, traduce il testo in inglese (lascia stare EN e IT) e
-pubblica tutto su un canale Telegram.
+Bot che legge la MEDIA TAB di account X (Twitter) tramite twscrape,
+prende i post con immagini/video, traduce il testo in inglese (lascia
+stare EN e IT) e pubblica tutto su un canale Telegram.
 
-Configurazione tramite variabili d'ambiente:
-  TELEGRAM_TOKEN   -> token del bot (da @BotFather)
-  TELEGRAM_CHAT_ID -> id/username del canale (es. @miocanale o -100123...)
+Configurazione tramite variabili d'ambiente (GitHub Secrets):
+  TELEGRAM_TOKEN    -> token del bot (da @BotFather)
+  TELEGRAM_CHAT_ID  -> id/username del canale (es. @miocanale o -100123...)
+  X_USERNAME        -> handle dell'account X usa-e-getta (solo etichetta)
+  X_COOKIES         -> "auth_token=XXXX; ct0=YYYY" presi dal browser
 
-Le fonti RSS si mettono nel file feeds.txt (una URL per riga).
-Lo stato (post gia' inviati) e' salvato in seen.json.
+Gli account X da seguire si mettono nel file accounts.txt (uno username
+per riga, senza @). Lo stato (post gia' inviati) e' in seen.json.
 """
 
-import json
 import os
 import re
 import sys
+import json
 import html
 import time
+import asyncio
 import tempfile
 
 import requests
-import feedparser
-from bs4 import BeautifulSoup
 from deep_translator import GoogleTranslator
+from twscrape import API, gather
 
 try:
     from langdetect import detect as detect_lang
@@ -32,20 +34,23 @@ except Exception:  # pragma: no cover
 # ------------------------------------------------------------------ config
 TOKEN = os.environ.get("TELEGRAM_TOKEN", "").strip()
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+X_USERNAME = os.environ.get("X_USERNAME", "").strip()
+X_COOKIES = os.environ.get("X_COOKIES", "").strip()
 
-FEEDS_FILE = "feeds.txt"
+ACCOUNTS_FILE = "accounts.txt"
 SEEN_FILE = "seen.json"
 
-# quanti post al massimo inviare per ogni esecuzione (anti-spam)
+# quanti post leggere dalla media tab di ogni account ad ogni giro
+FETCH_PER_ACCOUNT = 20
+# quanti post al massimo inviare per esecuzione (anti-spam)
 MAX_POSTS_PER_RUN = 15
-# lingue che NON vanno tradotte (vengono lasciate cosi' come sono)
+# lingue che NON vanno tradotte
 KEEP_LANGUAGES = {"en", "it"}
 # limite caption Telegram
 CAPTION_LIMIT = 1000
 
-API = f"https://api.telegram.org/bot{TOKEN}"
+API_URL = f"https://api.telegram.org/bot{TOKEN}"
 
-# header browser per scaricare i media (alcuni server rifiutano richieste "nude")
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                   "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
@@ -56,26 +61,23 @@ HTTP_HEADERS = {
 def load_seen():
     try:
         with open(SEEN_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            return set(data.get("ids", []))
+            return set(json.load(f).get("ids", []))
     except (FileNotFoundError, json.JSONDecodeError):
         return set()
 
 
 def save_seen(seen):
-    # teniamo solo gli ultimi 4000 id per non far crescere il file all'infinito
-    ids = list(seen)[-4000:]
+    ids = list(seen)[-4000:]  # evita crescita infinita del file
     with open(SEEN_FILE, "w", encoding="utf-8") as f:
         json.dump({"ids": ids}, f, ensure_ascii=False, indent=0)
 
 
-def load_feeds():
+def load_accounts():
     try:
-        with open(FEEDS_FILE, "r", encoding="utf-8") as f:
-            lines = [ln.strip() for ln in f]
+        with open(ACCOUNTS_FILE, "r", encoding="utf-8") as f:
+            lines = [ln.strip().lstrip("@") for ln in f]
     except FileNotFoundError:
         return []
-    # ignora righe vuote e commenti (#)
     return [ln for ln in lines if ln and not ln.startswith("#")]
 
 
@@ -93,74 +95,61 @@ def translate_to_english(text):
             lang = None
 
     if lang in KEEP_LANGUAGES:
-        return text  # gia' in inglese o italiano: lascio com'e'
+        return text  # gia' in inglese o italiano
 
     try:
         result = GoogleTranslator(source="auto", target="en").translate(text)
-        # se non c'e' nulla da tradurre (es. solo emoji) ritorna None: teniamo l'originale
-        return result or text
+        return result or text  # None (es. solo emoji) -> tieni originale
     except Exception as e:
         print(f"  [warn] traduzione fallita: {e}")
         return text
 
 
-# ------------------------------------------------------------------ parsing RSS
-def clean_text(raw_html):
-    """Estrae il testo leggibile da un blocco HTML."""
-    soup = BeautifulSoup(raw_html or "", "html.parser")
-    text = soup.get_text(separator=" ")
-    text = html.unescape(text)
-    text = re.sub(r"\s+", " ", text).strip()
-    return text
+# ------------------------------------------------------------------ media
+def clean_tweet_text(raw):
+    """Rimuove i link t.co finali (di solito puntano al media stesso)."""
+    text = re.sub(r"https?://t\.co/\S+", "", raw or "")
+    return re.sub(r"\s+", " ", text).strip()
 
 
-def extract_media(entry):
-    """Trova le URL di immagini e video dentro un post del feed."""
-    urls = []
-
-    # 1) enclosures / media_content (campi standard RSS)
-    for link in entry.get("links", []):
-        if link.get("rel") == "enclosure" and link.get("href"):
-            urls.append(link["href"])
-    for m in entry.get("media_content", []):
-        if m.get("url"):
-            urls.append(m["url"])
-    for m in entry.get("media_thumbnail", []):
-        if m.get("url"):
-            urls.append(m["url"])
-
-    # 2) tag <img> e <video> dentro la descrizione HTML
-    html_block = entry.get("summary", "") or entry.get("description", "")
-    soup = BeautifulSoup(html_block, "html.parser")
-    for img in soup.find_all("img"):
-        if img.get("src"):
-            urls.append(img["src"])
-    for vid in soup.find_all("video"):
-        if vid.get("src"):
-            urls.append(vid["src"])
-        for src in vid.find_all("source"):
-            if src.get("src"):
-                urls.append(src["src"])
-
-    # dedup mantenendo l'ordine
-    seen, clean = set(), []
-    for u in urls:
-        if u and u not in seen:
-            seen.add(u)
-            clean.append(u)
-    return clean
+def best_video_url(video):
+    """Sceglie la variante mp4 col bitrate piu' alto."""
+    mp4 = [v for v in video.variants
+           if getattr(v, "contentType", "") == "video/mp4" and getattr(v, "bitrate", None)]
+    if mp4:
+        return max(mp4, key=lambda v: v.bitrate or 0).url
+    for v in video.variants:  # fallback
+        if getattr(v, "url", None):
+            return v.url
+    return None
 
 
-def media_type(url):
-    low = url.lower().split("?")[0]
-    if low.endswith((".mp4", ".m4v", ".mov", ".webm")):
-        return "video"
-    return "photo"
+def collect_media(tweet):
+    """Ritorna lista di (url, kind) da un Tweet di twscrape."""
+    out = []
+    media = getattr(tweet, "media", None)
+    if not media:
+        return out
+    for photo in getattr(media, "photos", []) or []:
+        url = getattr(photo, "url", None)
+        if url:
+            # chiede la versione grande dell'immagine
+            if "pbs.twimg.com" in url and "name=" not in url:
+                url += ("&" if "?" in url else "?") + "name=large"
+            out.append((url, "photo"))
+    for video in getattr(media, "videos", []) or []:
+        url = best_video_url(video)
+        if url:
+            out.append((url, "video"))
+    for gif in getattr(media, "animated", []) or []:
+        url = getattr(gif, "videoUrl", None)
+        if url:
+            out.append((url, "video"))
+    return out
 
 
 # ------------------------------------------------------------------ download
 def download(url):
-    """Scarica un media in un file temporaneo. Ritorna (path, None) o (None, errore)."""
     try:
         r = requests.get(url, headers=HTTP_HEADERS, timeout=30, stream=True)
         r.raise_for_status()
@@ -182,11 +171,8 @@ def download(url):
 
 # ------------------------------------------------------------------ Telegram
 def tg_send_text(text):
-    r = requests.post(f"{API}/sendMessage", data={
-        "chat_id": CHAT_ID,
-        "text": text,
-        "parse_mode": "HTML",
-        "disable_web_page_preview": "false",
+    r = requests.post(f"{API_URL}/sendMessage", data={
+        "chat_id": CHAT_ID, "text": text, "parse_mode": "HTML",
     }, timeout=30)
     return r.ok
 
@@ -195,16 +181,13 @@ def tg_send_single(path, kind, caption):
     method = "sendVideo" if kind == "video" else "sendPhoto"
     field = "video" if kind == "video" else "photo"
     with open(path, "rb") as f:
-        r = requests.post(f"{API}/{method}", data={
-            "chat_id": CHAT_ID,
-            "caption": caption,
-            "parse_mode": "HTML",
+        r = requests.post(f"{API_URL}/{method}", data={
+            "chat_id": CHAT_ID, "caption": caption, "parse_mode": "HTML",
         }, files={field: f}, timeout=120)
     return r.ok, r.text
 
 
 def tg_send_group(items, caption):
-    """items = lista di (path, kind). Manda un album; caption sul primo."""
     media, files = [], {}
     for i, (path, kind) in enumerate(items):
         key = f"file{i}"
@@ -215,9 +198,8 @@ def tg_send_group(items, caption):
         media.append(entry)
         files[key] = open(path, "rb")
     try:
-        r = requests.post(f"{API}/sendMediaGroup", data={
-            "chat_id": CHAT_ID,
-            "media": json.dumps(media),
+        r = requests.post(f"{API_URL}/sendMediaGroup", data={
+            "chat_id": CHAT_ID, "media": json.dumps(media),
         }, files=files, timeout=180)
         return r.ok, r.text
     finally:
@@ -225,11 +207,8 @@ def tg_send_group(items, caption):
             f.close()
 
 
-# ------------------------------------------------------------------ post
-def build_caption(source_name, text_en, link):
-    parts = []
-    if source_name:
-        parts.append(f"<b>{html.escape(source_name)}</b>")
+def build_caption(username, text_en, link):
+    parts = [f"<b>@{html.escape(username)}</b>"]
     if text_en:
         parts.append(html.escape(text_en))
     caption = "\n\n".join(parts)
@@ -240,93 +219,96 @@ def build_caption(source_name, text_en, link):
     return caption
 
 
-def handle_entry(entry, source_name):
-    media_urls = extract_media(entry)
-    if not media_urls:
-        return False  # niente immagini/video -> saltiamo (vogliamo solo media)
+def send_tweet(tweet, username):
+    media = collect_media(tweet)
+    if not media:
+        return False  # vogliamo solo post con immagini/video
 
-    raw = entry.get("summary", "") or entry.get("title", "")
-    text = clean_text(raw)
-    text_en = translate_to_english(text)
-    link = entry.get("link", "")
-    caption = build_caption(source_name, text_en, link)
+    text_en = translate_to_english(clean_tweet_text(getattr(tweet, "rawContent", "")))
+    caption = build_caption(username, text_en, getattr(tweet, "url", ""))
 
-    # scarica i media (max 10, limite album Telegram)
     downloaded = []
-    for u in media_urls[:10]:
-        path, err = download(u)
+    for url, kind in media[:10]:  # album Telegram max 10
+        path, err = download(url)
         if path:
-            downloaded.append((path, media_type(u)))
+            downloaded.append((path, kind))
         else:
-            print(f"  [warn] download fallito {u}: {err}")
+            print(f"  [warn] download fallito {url}: {err}")
 
     ok = False
     try:
         if len(downloaded) == 1:
-            path, kind = downloaded[0]
-            ok, info = tg_send_single(path, kind, caption)
-            if not ok:
-                print(f"  [warn] invio media fallito: {info}")
+            ok, info = tg_send_single(*downloaded[0], caption)
         elif len(downloaded) > 1:
             ok, info = tg_send_group(downloaded, caption)
-            if not ok:
-                print(f"  [warn] invio album fallito: {info}")
-
-        # se non e' partito nessun media, mando almeno il testo+link
+        else:
+            info = "nessun media scaricato"
         if not ok:
-            ok = tg_send_text(caption)
+            print(f"  [warn] invio fallito: {info}")
+            ok = tg_send_text(caption)  # almeno testo + link
     finally:
         for path, _ in downloaded:
             try:
                 os.remove(path)
             except OSError:
                 pass
-
     return ok
 
 
 # ------------------------------------------------------------------ main
-def main():
-    if not TOKEN or not CHAT_ID:
-        print("ERRORE: mancano TELEGRAM_TOKEN o TELEGRAM_CHAT_ID.")
+async def run():
+    if not (TOKEN and CHAT_ID and X_USERNAME and X_COOKIES):
+        print("ERRORE: mancano TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, X_USERNAME o X_COOKIES.")
         sys.exit(1)
 
-    feeds = load_feeds()
-    if not feeds:
-        print("ERRORE: feeds.txt e' vuoto. Aggiungi almeno una URL RSS.")
+    accounts = load_accounts()
+    if not accounts:
+        print("ERRORE: accounts.txt e' vuoto. Aggiungi almeno uno username X.")
         sys.exit(1)
+
+    api = API()  # usa accounts.db (ricreato ad ogni run su GitHub)
+    try:
+        await api.pool.add_account_cookies(X_USERNAME, X_COOKIES)
+    except Exception as e:
+        print(f"  [info] add_account_cookies: {e}")  # gia' presente: ok
 
     seen = load_seen()
     first_run = len(seen) == 0
     sent = 0
 
-    for url in feeds:
-        print(f"\n>> Feed: {url}")
-        parsed = feedparser.parse(url, request_headers=HTTP_HEADERS)
-        if parsed.bozo:
-            print(f"  [warn] feed illeggibile: {parsed.bozo_exception}")
-        source_name = parsed.feed.get("title", "") if parsed.feed else ""
+    for username in accounts:
+        print(f"\n>> @{username}")
+        try:
+            user = await api.user_by_login(username)
+        except Exception as e:
+            print(f"  [warn] impossibile risolvere @{username}: {e}")
+            continue
+        if not user:
+            print(f"  [warn] @{username} non trovato (o cookie scaduti).")
+            continue
 
-        # i feed danno il piu' recente per primo: invertiamo per ordine cronologico
-        for entry in reversed(parsed.entries):
-            uid = entry.get("id") or entry.get("link") or entry.get("title", "")
+        try:
+            tweets = await gather(api.user_media(user.id, limit=FETCH_PER_ACCOUNT))
+        except Exception as e:
+            print(f"  [warn] errore lettura media di @{username}: {e}")
+            continue
+
+        # dal piu' vecchio al piu' recente, cosi' arrivano in ordine
+        for tweet in reversed(tweets):
+            uid = str(getattr(tweet, "id", "")) or getattr(tweet, "url", "")
             if not uid or uid in seen:
                 continue
-
             seen.add(uid)
 
-            # PRIMA esecuzione: NON inondiamo il canale con lo storico,
-            # marchiamo tutto come "visto" e ripartiamo puliti dal prossimo giro.
             if first_run:
-                continue
-
+                continue  # prima esecuzione: marca lo storico, non spamma
             if sent >= MAX_POSTS_PER_RUN:
                 continue
 
-            print(f"  -> nuovo post: {uid[:60]}")
-            if handle_entry(entry, source_name):
+            print(f"  -> nuovo: {getattr(tweet, 'url', uid)}")
+            if send_tweet(tweet, username):
                 sent += 1
-                time.sleep(2)  # piccola pausa anti rate-limit
+                time.sleep(2)
 
     save_seen(seen)
     if first_run:
@@ -337,4 +319,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(run())
