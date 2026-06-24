@@ -27,6 +27,8 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           X_USERNAME: ${{ secrets.X_USERNAME }}
           X_COOKIES: ${{ secrets.X_COOKIES }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
         run: python main.py
       - name: Save state (seen.json)
         run: |
