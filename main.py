@@ -490,7 +490,8 @@ async def run():
         print(f"\n>> @{username}")
         key = username.lower()
         uid = ids.get(key)
-        if uid is None:  # cache miss: risolvi una volta e memorizza
+        new_account = uid is None
+        if new_account:  # mai visto: risolvi l'id e memorizzalo in cache
             try:
                 user = await api.user_by_login(username)
             except Exception as e:
@@ -513,8 +514,13 @@ async def run():
         for t in fresh:
             seen.add(str(getattr(t, "id", "")))  # marca subito (anche se scartato)
 
-        if first_run:
-            continue  # primo giro: marca lo storico, non pubblica
+        # Niente backlog: al primo giro globale O quando un account e' nuovo,
+        # marca lo storico come 'visto' senza pubblicarlo. Si pubblica solo cio'
+        # che appare DOPO che l'account e' stato aggiunto/incontrato.
+        if first_run or new_account:
+            if new_account and not first_run:
+                print("  (nuovo account: storico marcato, non pubblicato)")
+            continue
 
         for group in build_groups(fresh, uid):
             if sent >= MAX_POSTS_PER_RUN:
