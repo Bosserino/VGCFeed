@@ -30,7 +30,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
         run: python main.py
-            - name: Save state (seen.json)
+      - name: Save state (seen.json)
         run: |
           if [[ -z "$(git status --porcelain seen.json)" ]]; then
             echo "Nessun cambiamento da salvare."
