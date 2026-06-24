@@ -42,7 +42,7 @@ CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 X_USERNAME = os.environ.get("X_USERNAME", "").strip()
 X_COOKIES = os.environ.get("X_COOKIES", "").strip()
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash").strip()
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "").strip() or "gemini-2.0-flash"
 
 ACCOUNTS_FILE = "accounts.txt"
 SEEN_FILE = "seen.json"
@@ -202,22 +202,33 @@ VALID_CATEGORIES = set(CATEGORY_TAGS) | {"other"}
 
 
 def keyword_classify(text):
-    """Fallback senza AI: classifica/filtra in base a parole nel testo."""
+    """Fallback senza AI: assegna una categoria SOLO con segnali forti e poco
+    ambigui; in tutti gli altri casi 'other' (nessun tag mostrato). Non sa
+    riconoscere i meme visivi, quindi non filtra: tiene (account gia' curati)."""
     t = (text or "").lower()
-    if any(k in t for k in ("youtu.be", "youtube.com", "new video", "video out",
-                            "just uploaded", "watch now")):
+    # VIDEO: link a piattaforme o annuncio esplicito di un video
+    if re.search(r"youtu\.be|youtube\.com|twitch\.tv|/video/", t) or any(
+            k in t for k in ("new video", "video is out", "video out now",
+                             "just uploaded", "new vod", "watch my")):
         cat = "video"
-    elif any(k in t for k in ("pokepast.es", "pokepaste", "team report", "rental",
-                              "rental code", "import this")):
+    # TEAM REPORT: paste o frasi molto specifiche
+    elif "pokepast" in t or any(k in t for k in (
+            "team report", "rental code", "rental team", "import this team")):
         cat = "team_report"
-    elif re.search(r"\btop\s?\d+\b|\bx-?[012]\b|top cut|day ?2|champion|finals|won the",
-                   t):
+    # RISULTATO: solo frasi forti (placement espliciti / vittorie), non parole vaghe
+    elif re.search(
+            r"top\s?(?:cut|4|8|16|32)\b|"
+            r"\bday\s?(?:2|two)\b|"
+            r"\b\d+(?:st|nd|rd|th)\s+place\b|"
+            r"won (?:the|my|regionals|a regional|the regional|nats|worlds)|"
+            r"\bchampion\b|\bfinalist\b|\brunner-?up\b", t):
         cat = "tournament_result"
-    elif any(k in t for k in ("announce", "announcing", "coming soon", "release")):
+    # ANNUNCIO: parole specifiche
+    elif any(k in t for k in ("announcing", "announce", "now available",
+                              "coming soon", "preorder", "pre-order")):
         cat = "announcement"
     else:
-        cat = "other"
-    # senza AI non sappiamo riconoscere i meme visivi: teniamo (account gia' curati)
+        cat = "other"  # incerto -> nessun tag
     return {"vgc_related": True, "category": cat, "value": "medium",
             "reason": "keyword-fallback"}
 
