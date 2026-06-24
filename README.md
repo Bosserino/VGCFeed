@@ -50,14 +50,24 @@ inglese o italiano) e li pubblica su un **canale Telegram**. Gira gratis su
 2. Carica tutti i file di questa cartella ("Add file → Upload files").
    - NON caricare la cartella `.venv` né `accounts.db` (servono solo in locale).
 
-### 5. Inserisci i 4 segreti
+### 5. Inserisci i segreti
 Repo → **Settings → Secrets and variables → Actions → New repository secret**. Crea:
 - `TELEGRAM_TOKEN`   → token del passo 1
 - `TELEGRAM_CHAT_ID` → chat id del passo 2
 - `X_USERNAME`       → username dell'account usa-e-getta (senza @)
 - `X_COOKIES`        → la stringa `auth_token=...; ct0=...` del passo 3
+- `GEMINI_API_KEY`   → **(opzionale)** chiave per il filtro AI (vedi sotto). Se non
+  la metti, il bot usa automaticamente le regole a parole chiave.
 
 > I segreti restano cifrati su GitHub: non finiscono mai nel codice.
+
+#### (Opzionale) Chiave Gemini per il filtro AI
+1. Vai su https://aistudio.google.com/apikey → **Create API key** (serve un account Google, è gratis).
+2. Copia la chiave e mettila nel segreto `GEMINI_API_KEY`.
+3. Il bot la userà per **guardare immagine + testo** di ogni post e capire se è VGC,
+   che tipo è (team report / video / risultato / annuncio / meme) e scartare i meme
+   e i contenuti non-VGC. Se la chiave manca o finisce i limiti gratuiti, ripiega
+   da solo sulle regole a parole chiave (più grezze).
 
 ### 6. Scegli gli account X da seguire
 Apri **`accounts.txt`** e metti **uno username per riga, senza @**. Esempio:
@@ -88,10 +98,21 @@ Costi: **zero per sempre**. Ma trattandosi di un account X "scrapato", ogni tant
   spesso solo su GitHub, la soluzione di riserva è far girare lo stesso bot **sul tuo
   Mac** (IP di casa, bloccato molto meno) — chiedimi e ti preparo lo script.
 
+## Come pubblica (thread e filtri)
+- **Thread** = più tweet dello stesso autore in fila: vengono uniti in **un solo album**.
+  Ogni immagine porta in didascalia **il testo del suo tweet** (apri la 3ª foto → vedi
+  il testo del 3° tweet). Se i media sono più di 10, l'album viene spezzato.
+- **Filtro/categoria**: ogni post viene classificato e taggato (`📋 Team Report`,
+  `🎥 Video`, `🏆 Result`, `📣 Announcement`, `😂 Meme`…). I meme e i contenuti
+  non-VGC vengono scartati.
+
 ## Modifiche facili (in `main.py`)
 - `FETCH_PER_ACCOUNT` → quanti post leggere per account ad ogni giro
 - `MAX_POSTS_PER_RUN` → tetto di post inviati per esecuzione
 - `KEEP_LANGUAGES`    → lingue da NON tradurre (default: `en`, `it`)
+- `DROP_CATEGORIES`   → categorie da scartare sempre (default: `{"meme"}`)
+- `DROP_IF_NOT_VGC`   → scarta i post non-VGC (default: `True`)
+- `DROP_LOW_VALUE`    → scarta anche i post a basso valore (default: `False`)
 - Frequenza: in `.github/workflows/bot.yml`, riga `cron: "*/5 * * * *"`.
 
 ## Nota
