@@ -46,6 +46,7 @@ GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash").strip()
 
 ACCOUNTS_FILE = "accounts.txt"
 SEEN_FILE = "seen.json"
+IDS_FILE = "ids.json"   # cache username -> id (evita di risolvere ogni giro)
 
 FETCH_PER_ACCOUNT = 20          # post letti per account ad ogni giro
 MAX_POSTS_PER_RUN = 25          # tetto post (album) inviati per esecuzione
@@ -92,6 +93,19 @@ def save_seen(seen):
     ids = list(seen)[-6000:]
     with open(SEEN_FILE, "w", encoding="utf-8") as f:
         json.dump({"ids": ids}, f, ensure_ascii=False, indent=0)
+
+
+def load_ids():
+    try:
+        with open(IDS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_ids(ids):
+    with open(IDS_FILE, "w", encoding="utf-8") as f:
+        json.dump(ids, f, ensure_ascii=False, indent=0)
 
 
 def load_accounts():
@@ -457,22 +471,28 @@ async def run():
         print(f"  [info] add_account_cookies: {e}")
 
     seen = load_seen()
+    ids = load_ids()
     first_run = len(seen) == 0
     sent = 0
 
     for username in accounts:
         print(f"\n>> @{username}")
-        try:
-            user = await api.user_by_login(username)
-        except Exception as e:
-            print(f"  [warn] impossibile risolvere @{username}: {e}")
-            continue
-        if not user:
-            print(f"  [warn] @{username} non trovato (o cookie scaduti).")
-            continue
+        key = username.lower()
+        uid = ids.get(key)
+        if uid is None:  # cache miss: risolvi una volta e memorizza
+            try:
+                user = await api.user_by_login(username)
+            except Exception as e:
+                print(f"  [warn] impossibile risolvere @{username}: {e}")
+                continue
+            if not user:
+                print(f"  [warn] @{username} non trovato (o cookie scaduti).")
+                continue
+            uid = user.id
+            ids[key] = uid
 
         try:
-            tweets = await gather(api.user_media(user.id, limit=FETCH_PER_ACCOUNT))
+            tweets = await gather(api.user_media(uid, limit=FETCH_PER_ACCOUNT))
         except Exception as e:
             print(f"  [warn] errore lettura media di @{username}: {e}")
             continue
@@ -485,7 +505,7 @@ async def run():
         if first_run:
             continue  # primo giro: marca lo storico, non pubblica
 
-        for group in build_groups(fresh, user.id):
+        for group in build_groups(fresh, uid):
             if sent >= MAX_POSTS_PER_RUN:
                 break
             if process_group(group, username):
@@ -493,6 +513,7 @@ async def run():
                 time.sleep(2)
 
     save_seen(seen)
+    save_ids(ids)
     if first_run:
         print("\nPrima esecuzione: storico marcato come 'visto'. "
               "Dal prossimo giro pubblico solo i post NUOVI.")
