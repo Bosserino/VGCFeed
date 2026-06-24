@@ -1,16 +1,19 @@
 """
-Bot che legge la MEDIA TAB di account X (Twitter) tramite twscrape,
-prende i post con immagini/video, traduce il testo in inglese (lascia
-stare EN e IT) e pubblica tutto su un canale Telegram.
+Bot che legge la MEDIA TAB di account X (via twscrape), raggruppa i THREAD,
+classifica/filtra i contenuti (AI Gemini gratuita con fallback a regole),
+traduce il testo in inglese (lascia stare EN e IT) e pubblica su un canale
+Telegram come album unico, con UNA didascalia per ogni immagine (il testo
+del SUO tweet nel thread).
 
-Configurazione tramite variabili d'ambiente (GitHub Secrets):
-  TELEGRAM_TOKEN    -> token del bot (da @BotFather)
-  TELEGRAM_CHAT_ID  -> id/username del canale (es. @miocanale o -100123...)
-  X_USERNAME        -> handle dell'account X usa-e-getta (solo etichetta)
-  X_COOKIES         -> "auth_token=XXXX; ct0=YYYY" presi dal browser
+Variabili d'ambiente (GitHub Secrets):
+  TELEGRAM_TOKEN    -> token del bot (@BotFather)
+  TELEGRAM_CHAT_ID  -> canale (@nome o -100123...)
+  X_USERNAME        -> handle account X usa-e-getta (etichetta)
+  X_COOKIES         -> "auth_token=XXXX; ct0=YYYY"
+  GEMINI_API_KEY    -> (opzionale) chiave Google AI Studio per il filtro AI
+  GEMINI_MODEL      -> (opzionale) modello, default "gemini-2.0-flash"
 
-Gli account X da seguire si mettono nel file accounts.txt (uno username
-per riga, senza @). Lo stato (post gia' inviati) e' in seen.json.
+Account da seguire in accounts.txt (uno username per riga). Stato in seen.json.
 """
 
 import os
@@ -19,8 +22,10 @@ import sys
 import json
 import html
 import time
+import base64
 import asyncio
 import tempfile
+from collections import defaultdict
 
 import requests
 from deep_translator import GoogleTranslator
@@ -36,20 +41,37 @@ TOKEN = os.environ.get("TELEGRAM_TOKEN", "").strip()
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
 X_USERNAME = os.environ.get("X_USERNAME", "").strip()
 X_COOKIES = os.environ.get("X_COOKIES", "").strip()
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash").strip()
 
 ACCOUNTS_FILE = "accounts.txt"
 SEEN_FILE = "seen.json"
 
-# quanti post leggere dalla media tab di ogni account ad ogni giro
-FETCH_PER_ACCOUNT = 20
-# quanti post al massimo inviare per esecuzione (anti-spam)
-MAX_POSTS_PER_RUN = 15
-# lingue che NON vanno tradotte
-KEEP_LANGUAGES = {"en", "it"}
-# limite caption Telegram
-CAPTION_LIMIT = 1000
+FETCH_PER_ACCOUNT = 20          # post letti per account ad ogni giro
+MAX_POSTS_PER_RUN = 15          # tetto post (album) inviati per esecuzione
+KEEP_LANGUAGES = {"en", "it"}   # lingue da NON tradurre
+CAPTION_LIMIT = 1024            # limite Telegram per didascalia
+
+# --- filtri contenuto ---
+FILTER_ENABLED = True
+DROP_IF_NOT_VGC = True          # scarta i post non legati al VGC
+DROP_CATEGORIES = {"meme"}      # categorie da scartare sempre
+DROP_LOW_VALUE = False          # se True, scarta anche i post "value=low"
+
+# etichette mostrate per categoria
+CATEGORY_TAGS = {
+    "team_report": "📋 Team Report",
+    "video": "🎥 Video",
+    "tournament_result": "🏆 Result",
+    "announcement": "📣 Announcement",
+    "discussion": "💬 Discussion",
+    "meme": "😂 Meme",
+    "other": "",
+}
 
 API_URL = f"https://api.telegram.org/bot{TOKEN}"
+GEMINI_URL = (f"https://generativelanguage.googleapis.com/v1beta/models/"
+              f"{GEMINI_MODEL}:generateContent")
 
 HTTP_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -67,14 +89,14 @@ def load_seen():
 
 
 def save_seen(seen):
-    ids = list(seen)[-4000:]  # evita crescita infinita del file
+    ids = list(seen)[-6000:]
     with open(SEEN_FILE, "w", encoding="utf-8") as f:
         json.dump({"ids": ids}, f, ensure_ascii=False, indent=0)
 
 
 def load_accounts():
     try:
-        with open(ACCOUNTS_FILE, "r", encoding="utf-8-sig") as f:
+        with open(ACCOUNTS_FILE, "r", encoding="utf-8") as f:
             lines = [ln.strip().lstrip("@") for ln in f]
     except FileNotFoundError:
         return []
@@ -86,46 +108,40 @@ def translate_to_english(text):
     text = (text or "").strip()
     if not text:
         return text
-
     lang = None
     if detect_lang:
         try:
             lang = detect_lang(text)
         except Exception:
             lang = None
-
     if lang in KEEP_LANGUAGES:
-        return text  # gia' in inglese o italiano
-
+        return text
     try:
         result = GoogleTranslator(source="auto", target="en").translate(text)
-        return result or text  # None (es. solo emoji) -> tieni originale
+        return result or text
     except Exception as e:
         print(f"  [warn] traduzione fallita: {e}")
         return text
 
 
-# ------------------------------------------------------------------ media
 def clean_tweet_text(raw):
-    """Rimuove i link t.co finali (di solito puntano al media stesso)."""
     text = re.sub(r"https?://t\.co/\S+", "", raw or "")
-    return re.sub(r"\s+", " ", text).strip()
+    return re.sub(r"[ \t]+", " ", text).strip()
 
 
+# ------------------------------------------------------------------ media
 def best_video_url(video):
-    """Sceglie la variante mp4 col bitrate piu' alto."""
     mp4 = [v for v in video.variants
            if getattr(v, "contentType", "") == "video/mp4" and getattr(v, "bitrate", None)]
     if mp4:
         return max(mp4, key=lambda v: v.bitrate or 0).url
-    for v in video.variants:  # fallback
+    for v in video.variants:
         if getattr(v, "url", None):
             return v.url
     return None
 
 
 def collect_media(tweet):
-    """Ritorna lista di (url, kind) da un Tweet di twscrape."""
     out = []
     media = getattr(tweet, "media", None)
     if not media:
@@ -133,7 +149,6 @@ def collect_media(tweet):
     for photo in getattr(media, "photos", []) or []:
         url = getattr(photo, "url", None)
         if url:
-            # chiede la versione grande dell'immagine
             if "pbs.twimg.com" in url and "name=" not in url:
                 url += ("&" if "?" in url else "?") + "name=large"
             out.append((url, "photo"))
@@ -148,7 +163,6 @@ def collect_media(tweet):
     return out
 
 
-# ------------------------------------------------------------------ download
 def download(url):
     try:
         r = requests.get(url, headers=HTTP_HEADERS, timeout=30, stream=True)
@@ -159,7 +173,7 @@ def download(url):
         with os.fdopen(fd, "wb") as f:
             for chunk in r.iter_content(8192):
                 size += len(chunk)
-                if size > 45 * 1024 * 1024:  # limite Telegram ~50MB
+                if size > 45 * 1024 * 1024:
                     f.close()
                     os.remove(path)
                     return None, "file troppo grande"
@@ -167,6 +181,97 @@ def download(url):
         return path, None
     except Exception as e:
         return None, str(e)
+
+
+# ------------------------------------------------------------------ classificazione
+VALID_CATEGORIES = set(CATEGORY_TAGS) | {"other"}
+
+
+def keyword_classify(text):
+    """Fallback senza AI: classifica/filtra in base a parole nel testo."""
+    t = (text or "").lower()
+    if any(k in t for k in ("youtu.be", "youtube.com", "new video", "video out",
+                            "just uploaded", "watch now")):
+        cat = "video"
+    elif any(k in t for k in ("pokepast.es", "pokepaste", "team report", "rental",
+                              "rental code", "import this")):
+        cat = "team_report"
+    elif re.search(r"\btop\s?\d+\b|\bx-?[012]\b|top cut|day ?2|champion|finals|won the",
+                   t):
+        cat = "tournament_result"
+    elif any(k in t for k in ("announce", "announcing", "coming soon", "release")):
+        cat = "announcement"
+    else:
+        cat = "other"
+    # senza AI non sappiamo riconoscere i meme visivi: teniamo (account gia' curati)
+    return {"vgc_related": True, "category": cat, "value": "medium",
+            "reason": "keyword-fallback"}
+
+
+def gemini_classify(text, image_path):
+    """Classifica con Google Gemini (immagine + testo). Solleva su errore."""
+    prompt = (
+        "You classify a social media post from a competitive Pokemon VGC "
+        "(Video Game Championships) player. Look at the image and the text.\n"
+        "Return ONLY JSON with keys:\n"
+        '  "vgc_related": true/false (is it about competitive Pokemon VGC?),\n'
+        '  "category": one of '
+        '["team_report","video","tournament_result","announcement","discussion","meme","other"],\n'
+        '  "value": "high"|"medium"|"low" (added value for a VGC fan),\n'
+        '  "reason": short string.\n'
+        f"POST TEXT: {text[:1500]!r}"
+    )
+    parts = [{"text": prompt}]
+    if image_path:
+        try:
+            with open(image_path, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode()
+            mime = "image/png" if image_path.lower().endswith(".png") else "image/jpeg"
+            parts.append({"inline_data": {"mime_type": mime, "data": b64}})
+        except OSError:
+            pass
+
+    r = requests.post(
+        GEMINI_URL,
+        params={"key": GEMINI_API_KEY},
+        json={"contents": [{"parts": parts}],
+              "generationConfig": {"response_mime_type": "application/json",
+                                   "temperature": 0}},
+        timeout=60,
+    )
+    r.raise_for_status()
+    raw = r.json()["candidates"][0]["content"]["parts"][0]["text"]
+    data = json.loads(raw)
+    cat = data.get("category", "other")
+    if cat not in VALID_CATEGORIES:
+        cat = "other"
+    return {"vgc_related": bool(data.get("vgc_related", True)),
+            "category": cat,
+            "value": data.get("value", "medium"),
+            "reason": data.get("reason", "")}
+
+
+def classify(text, image_path):
+    """Prova l'AI; se la chiave manca o fallisce, usa le regole."""
+    if not FILTER_ENABLED:
+        return {"vgc_related": True, "category": "other", "value": "high",
+                "reason": "filter-off"}
+    if GEMINI_API_KEY:
+        try:
+            return gemini_classify(text, image_path)
+        except Exception as e:
+            print(f"  [warn] Gemini non disponibile, uso le regole: {e}")
+    return keyword_classify(text)
+
+
+def should_drop(c):
+    if DROP_IF_NOT_VGC and not c["vgc_related"]:
+        return True, "non-VGC"
+    if c["category"] in DROP_CATEGORIES:
+        return True, f"categoria {c['category']}"
+    if DROP_LOW_VALUE and c.get("value") == "low":
+        return True, "low value"
+    return False, ""
 
 
 # ------------------------------------------------------------------ Telegram
@@ -187,12 +292,13 @@ def tg_send_single(path, kind, caption):
     return r.ok, r.text
 
 
-def tg_send_group(items, caption):
+def tg_send_group(chunk):
+    """chunk = lista di (path, kind, caption). Album con didascalia per item."""
     media, files = [], {}
-    for i, (path, kind) in enumerate(items):
+    for i, (path, kind, caption) in enumerate(chunk):
         key = f"file{i}"
         entry = {"type": kind, "media": f"attach://{key}"}
-        if i == 0:
+        if caption:
             entry["caption"] = caption
             entry["parse_mode"] = "HTML"
         media.append(entry)
@@ -207,52 +313,120 @@ def tg_send_group(items, caption):
             f.close()
 
 
-def build_caption(username, text_en, link):
-    parts = [f"<b>@{html.escape(username)}</b>"]
-    if text_en:
-        parts.append(html.escape(text_en))
-    caption = "\n\n".join(parts)
-    if len(caption) > CAPTION_LIMIT:
-        caption = caption[:CAPTION_LIMIT - 1].rstrip() + "…"
+def send_album(items):
+    """items = lista di (path, kind, caption). Spezza in blocchi da 10."""
+    ok_any = False
+    for start in range(0, len(items), 10):
+        chunk = items[start:start + 10]
+        if len(chunk) == 1:
+            path, kind, caption = chunk[0]
+            ok, info = tg_send_single(path, kind, caption)
+        else:
+            ok, info = tg_send_group(chunk)
+        if not ok:
+            print(f"  [warn] invio album fallito: {info}")
+        ok_any = ok_any or ok
+        time.sleep(1)
+    return ok_any
+
+
+def truncate(text, limit=CAPTION_LIMIT):
+    return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
+
+
+def first_caption(username, category, is_thread, lead_text, link):
+    header = f"<b>@{html.escape(username)}</b>"
+    tag = CATEGORY_TAGS.get(category, "")
+    if tag:
+        header += f"  {tag}"
+    if is_thread:
+        header += "  🧵"
+    cap = header
+    if lead_text:
+        cap += "\n\n" + html.escape(lead_text)
     if link:
-        caption += f'\n\n<a href="{html.escape(link)}">🔗 Original on X</a>'
-    return caption
+        cap += f'\n\n<a href="{html.escape(link)}">🔗 Original on X</a>'
+    return truncate(cap)
 
 
-def send_tweet(tweet, username):
-    media = collect_media(tweet)
-    if not media:
-        return False  # vogliamo solo post con immagini/video
+# ------------------------------------------------------------------ gruppi/thread
+def build_groups(tweets, user_id):
+    """Raggruppa i tweet (gia' filtrati a 'non visti') per thread.
+    Ritorna lista di liste di tweet, ognuna ordinata dal piu' vecchio al piu' nuovo,
+    e le liste ordinate cronologicamente."""
+    own = [t for t in tweets if str(getattr(t.user, "id", "")) == str(user_id)]
+    by_conv = defaultdict(list)
+    for t in own:
+        by_conv[str(getattr(t, "conversationId", getattr(t, "id", "")))].append(t)
+    groups = []
+    for conv_tweets in by_conv.values():
+        conv_tweets.sort(key=lambda t: getattr(t, "id", 0))  # vecchio -> nuovo
+        groups.append(conv_tweets)
+    groups.sort(key=lambda g: getattr(g[0], "id", 0))
+    return groups
 
-    text_en = translate_to_english(clean_tweet_text(getattr(tweet, "rawContent", "")))
-    caption = build_caption(username, text_en, getattr(tweet, "url", ""))
 
-    downloaded = []
-    for url, kind in media[:10]:  # album Telegram max 10
+def process_group(group, username):
+    """Scarica media, classifica, filtra, invia un album con caption per-immagine.
+    Ritorna True se ha pubblicato qualcosa."""
+    is_thread = len(group) > 1
+
+    # raccoglie (url, kind, testo_tradotto_del_tweet) preservando l'ordine del thread
+    media_items = []
+    for t in group:
+        ttext = translate_to_english(clean_tweet_text(getattr(t, "rawContent", "")))
+        for url, kind in collect_media(t):
+            media_items.append((url, kind, ttext))
+    if not media_items:
+        return False
+
+    # scarica
+    downloaded = []  # (path, kind, ttext)
+    for url, kind, ttext in media_items:
         path, err = download(url)
         if path:
-            downloaded.append((path, kind))
+            downloaded.append((path, kind, ttext))
         else:
             print(f"  [warn] download fallito {url}: {err}")
+    if not downloaded:
+        return False
 
-    ok = False
-    try:
-        if len(downloaded) == 1:
-            ok, info = tg_send_single(*downloaded[0], caption)
-        elif len(downloaded) > 1:
-            ok, info = tg_send_group(downloaded, caption)
-        else:
-            info = "nessun media scaricato"
-        if not ok:
-            print(f"  [warn] invio fallito: {info}")
-            ok = tg_send_text(caption)  # almeno testo + link
-    finally:
-        for path, _ in downloaded:
+    # classifica usando il testo unito del thread + la prima immagine
+    combined_text = " \n".join(dict.fromkeys(
+        t for _, _, t in downloaded if t)) or \
+        translate_to_english(clean_tweet_text(getattr(group[0], "rawContent", "")))
+    first_image = next((p for p, k, _ in downloaded if k == "photo"), None)
+    c = classify(combined_text, first_image)
+    drop, why = should_drop(c)
+    if drop:
+        print(f"  -> SCARTATO ({why}; cat={c['category']})")
+        for path, _, _ in downloaded:
             try:
                 os.remove(path)
             except OSError:
                 pass
-    return ok
+        return False
+
+    # costruisce le didascalie: header sul primo item, testo-del-tweet su ognuno
+    lead_link = getattr(group[0], "url", "")
+    items = []
+    for idx, (path, kind, ttext) in enumerate(downloaded):
+        if idx == 0:
+            cap = first_caption(username, c["category"], is_thread, ttext, lead_link)
+        else:
+            cap = truncate(html.escape(ttext)) if ttext else ""
+        items.append((path, kind, cap))
+
+    print(f"  -> PUBBLICO ({c['category']}, {len(items)} media, "
+          f"{'thread' if is_thread else 'singolo'})")
+    try:
+        return send_album(items)
+    finally:
+        for path, _, _ in downloaded:
+            try:
+                os.remove(path)
+            except OSError:
+                pass
 
 
 # ------------------------------------------------------------------ main
@@ -263,14 +437,16 @@ async def run():
 
     accounts = load_accounts()
     if not accounts:
-        print("ERRORE: accounts.txt e' vuoto. Aggiungi almeno uno username X.")
+        print("ERRORE: accounts.txt e' vuoto.")
         sys.exit(1)
 
-    api = API()  # usa accounts.db (ricreato ad ogni run su GitHub)
+    print(f"Filtro AI: {'ON (Gemini)' if GEMINI_API_KEY else 'OFF -> uso regole'}")
+
+    api = API()
     try:
         await api.pool.add_account_cookies(X_USERNAME, X_COOKIES)
     except Exception as e:
-        print(f"  [info] add_account_cookies: {e}")  # gia' presente: ok
+        print(f"  [info] add_account_cookies: {e}")
 
     seen = load_seen()
     first_run = len(seen) == 0
@@ -293,29 +469,27 @@ async def run():
             print(f"  [warn] errore lettura media di @{username}: {e}")
             continue
 
-        # dal piu' vecchio al piu' recente, cosi' arrivano in ordine
-        for tweet in reversed(tweets):
-            uid = str(getattr(tweet, "id", "")) or getattr(tweet, "url", "")
-            if not uid or uid in seen:
-                continue
-            seen.add(uid)
+        # tieni solo i tweet non ancora visti, poi raggruppa per thread
+        fresh = [t for t in tweets if str(getattr(t, "id", "")) not in seen]
+        for t in fresh:
+            seen.add(str(getattr(t, "id", "")))  # marca subito (anche se scartato)
 
-            if first_run:
-                continue  # prima esecuzione: marca lo storico, non spamma
+        if first_run:
+            continue  # primo giro: marca lo storico, non pubblica
+
+        for group in build_groups(fresh, user.id):
             if sent >= MAX_POSTS_PER_RUN:
-                continue
-
-            print(f"  -> nuovo: {getattr(tweet, 'url', uid)}")
-            if send_tweet(tweet, username):
+                break
+            if process_group(group, username):
                 sent += 1
                 time.sleep(2)
 
     save_seen(seen)
     if first_run:
         print("\nPrima esecuzione: storico marcato come 'visto'. "
-              "Dal prossimo giro invio solo i post NUOVI.")
+              "Dal prossimo giro pubblico solo i post NUOVI.")
     else:
-        print(f"\nFatto. Post inviati: {sent}")
+        print(f"\nFatto. Post (album) pubblicati: {sent}")
 
 
 if __name__ == "__main__":
