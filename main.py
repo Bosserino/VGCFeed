@@ -341,12 +341,15 @@ def first_caption(username, category, is_thread, lead_text, link):
         header += f"  {tag}"
     if is_thread:
         header += "  🧵"
-    cap = header
-    if lead_text:
-        cap += "\n\n" + html.escape(lead_text)
-    if link:
-        cap += f'\n\n<a href="{html.escape(link)}">🔗 Original on X</a>'
-    return truncate(cap)
+    link_html = (f'\n\n<a href="{html.escape(link)}">🔗 Original on X</a>'
+                 if link else "")
+    # tronca SOLO il corpo del testo, preservando header e link
+    body = html.escape(lead_text) if lead_text else ""
+    room = CAPTION_LIMIT - len(header) - len(link_html) - 2
+    if len(body) > room:
+        body = body[:max(0, room - 1)].rstrip() + "…"
+    cap = header + ("\n\n" + body if body else "") + link_html
+    return cap
 
 
 # ------------------------------------------------------------------ gruppi/thread
@@ -371,21 +374,22 @@ def process_group(group, username):
     Ritorna True se ha pubblicato qualcosa."""
     is_thread = len(group) > 1
 
-    # raccoglie (url, kind, testo_tradotto_del_tweet) preservando l'ordine del thread
+    # raccoglie (url, kind, testo_del_tweet, prima_img_del_tweet) in ordine.
+    # Il testo va solo sulla PRIMA immagine di ogni tweet -> niente ripetizioni.
     media_items = []
     for t in group:
         ttext = translate_to_english(clean_tweet_text(getattr(t, "rawContent", "")))
-        for url, kind in collect_media(t):
-            media_items.append((url, kind, ttext))
+        for j, (url, kind) in enumerate(collect_media(t)):
+            media_items.append((url, kind, ttext, j == 0))
     if not media_items:
         return False
 
     # scarica
-    downloaded = []  # (path, kind, ttext)
-    for url, kind, ttext in media_items:
+    downloaded = []  # (path, kind, ttext, is_first_of_tweet)
+    for url, kind, ttext, is_first in media_items:
         path, err = download(url)
         if path:
-            downloaded.append((path, kind, ttext))
+            downloaded.append((path, kind, ttext, is_first))
         else:
             print(f"  [warn] download fallito {url}: {err}")
     if not downloaded:
@@ -393,28 +397,32 @@ def process_group(group, username):
 
     # classifica usando il testo unito del thread + la prima immagine
     combined_text = " \n".join(dict.fromkeys(
-        t for _, _, t in downloaded if t)) or \
+        t for _, _, t, _ in downloaded if t)) or \
         translate_to_english(clean_tweet_text(getattr(group[0], "rawContent", "")))
-    first_image = next((p for p, k, _ in downloaded if k == "photo"), None)
+    first_image = next((p for p, k, _, _ in downloaded if k == "photo"), None)
     c = classify(combined_text, first_image)
     drop, why = should_drop(c)
     if drop:
         print(f"  -> SCARTATO ({why}; cat={c['category']})")
-        for path, _, _ in downloaded:
+        for path, _, _, _ in downloaded:
             try:
                 os.remove(path)
             except OSError:
                 pass
         return False
 
-    # costruisce le didascalie: header sul primo item, testo-del-tweet su ognuno
+    # didascalie: header sul primo item; il testo di un tweet compare UNA volta
+    # sola (sulla sua prima immagine), le immagini extra dello stesso tweet restano
+    # senza testo per evitare ripetizioni e overflow del limite caratteri.
     lead_link = getattr(group[0], "url", "")
     items = []
-    for idx, (path, kind, ttext) in enumerate(downloaded):
+    for idx, (path, kind, ttext, is_first) in enumerate(downloaded):
         if idx == 0:
             cap = first_caption(username, c["category"], is_thread, ttext, lead_link)
-        else:
+        elif is_first:
             cap = truncate(html.escape(ttext)) if ttext else ""
+        else:
+            cap = ""
         items.append((path, kind, cap))
 
     print(f"  -> PUBBLICO ({c['category']}, {len(items)} media, "
@@ -422,7 +430,7 @@ def process_group(group, username):
     try:
         return send_album(items)
     finally:
-        for path, _, _ in downloaded:
+        for path, _, _, _ in downloaded:
             try:
                 os.remove(path)
             except OSError:
