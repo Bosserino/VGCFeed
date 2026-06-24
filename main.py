@@ -48,7 +48,7 @@ ACCOUNTS_FILE = "accounts.txt"
 SEEN_FILE = "seen.json"
 
 FETCH_PER_ACCOUNT = 20          # post letti per account ad ogni giro
-MAX_POSTS_PER_RUN = 15          # tetto post (album) inviati per esecuzione
+MAX_POSTS_PER_RUN = 25          # tetto post (album) inviati per esecuzione
 KEEP_LANGUAGES = {"en", "it"}   # lingue da NON tradurre
 CAPTION_LIMIT = 1024            # limite Telegram per didascalia
 
