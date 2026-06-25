@@ -26,6 +26,7 @@ import base64
 import asyncio
 import tempfile
 from collections import defaultdict
+from datetime import datetime, timezone, timedelta
 
 import requests
 from deep_translator import GoogleTranslator
@@ -54,6 +55,7 @@ FETCH_PER_ACCOUNT = 12          # post letti per account ad ogni giro
 MAX_POSTS_PER_RUN = 25          # tetto post (album) inviati per esecuzione
 ACCOUNTS_PER_RUN = 53           # account processati per run (sharding a rotazione)
 CURSOR_KEY = "__cursor__"       # chiave riservata in ids.json per il cursore shard
+MAX_POST_AGE_HOURS = 48         # pubblica solo tweet piu' recenti di X ore (anti-vecchi)
 KEEP_LANGUAGES = {"en", "it"}   # lingue da NON tradurre
 CAPTION_LIMIT = 1024            # limite Telegram per didascalia
 
@@ -468,6 +470,23 @@ def build_groups(tweets, user_id):
     return groups
 
 
+def recent_enough(group):
+    """True se il tweet piu' recente del gruppo e' entro MAX_POST_AGE_HOURS.
+    Serve a NON pubblicare vecchi tweet mai marcati (residui del passato)."""
+    newest = None
+    for t in group:
+        d = getattr(t, "date", None)
+        if d is None:
+            continue
+        if d.tzinfo is None:
+            d = d.replace(tzinfo=timezone.utc)
+        if newest is None or d > newest:
+            newest = d
+    if newest is None:
+        return True  # nessuna data disponibile: non bloccare
+    return (datetime.now(timezone.utc) - newest) <= timedelta(hours=MAX_POST_AGE_HOURS)
+
+
 def process_group(group, username):
     """Scarica i media, classifica una volta, e pubblica UN ALBUM PER TWEET in
     ordine cronologico. Cosi' le immagini e il testo di ogni tweet restano
@@ -619,6 +638,8 @@ async def run():
             continue
 
         for group in build_groups(fresh, uid):
+            if not recent_enough(group):
+                continue  # vecchio: gia' marcato visto sopra, non lo pubblico
             newest = max(int(getattr(t, "id", 0) or 0) for t in group)
             pending.append((newest, group, username))
 
