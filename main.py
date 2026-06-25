@@ -82,15 +82,17 @@ HTTP_HEADERS = {
 
 # ------------------------------------------------------------------ stato
 def load_seen():
+    """Ritorna la lista ORDINATA (vecchio->nuovo) degli id gia' visti."""
     try:
         with open(SEEN_FILE, "r", encoding="utf-8") as f:
-            return set(json.load(f).get("ids", []))
+            return list(json.load(f).get("ids", []))
     except (FileNotFoundError, json.JSONDecodeError):
-        return set()
+        return []
 
 
-def save_seen(seen):
-    ids = list(seen)[-6000:]
+def save_seen(seen_list):
+    # mantiene l'ORDINE e tiene gli ultimi (piu' recenti): niente tagli casuali
+    ids = seen_list[-8000:]
     with open(SEEN_FILE, "w", encoding="utf-8") as f:
         json.dump({"ids": ids}, f, ensure_ascii=False, indent=0)
 
@@ -233,8 +235,14 @@ def keyword_classify(text):
             "reason": "keyword-fallback"}
 
 
+# throttle per rispettare il limite/minuto del piano gratis Gemini (~15 req/min)
+GEMINI_MIN_INTERVAL = 4.5   # secondi minimi tra due chiamate
+_LAST_GEMINI = [0.0]
+
+
 def gemini_classify(text, image_path):
-    """Classifica con Google Gemini (immagine + testo). Solleva su errore."""
+    """Classifica con Google Gemini (immagine + testo), con throttle e retry sul
+    429. Solleva un'eccezione se non riesce (-> il chiamante usa le regole)."""
     prompt = (
         "You classify a social media post from a competitive Pokemon VGC "
         "(Video Game Championships) player. Look at the image and the text.\n"
@@ -256,24 +264,30 @@ def gemini_classify(text, image_path):
         except OSError:
             pass
 
-    r = requests.post(
-        GEMINI_URL,
-        params={"key": GEMINI_API_KEY},
-        json={"contents": [{"parts": parts}],
-              "generationConfig": {"response_mime_type": "application/json",
-                                   "temperature": 0}},
-        timeout=60,
-    )
-    r.raise_for_status()
-    raw = r.json()["candidates"][0]["content"]["parts"][0]["text"]
-    data = json.loads(raw)
-    cat = data.get("category", "other")
-    if cat not in VALID_CATEGORIES:
-        cat = "other"
-    return {"vgc_related": bool(data.get("vgc_related", True)),
-            "category": cat,
-            "value": data.get("value", "medium"),
-            "reason": data.get("reason", "")}
+    payload = {"contents": [{"parts": parts}],
+               "generationConfig": {"response_mime_type": "application/json",
+                                    "temperature": 0}}
+    for attempt in range(3):
+        wait = GEMINI_MIN_INTERVAL - (time.monotonic() - _LAST_GEMINI[0])
+        if wait > 0:
+            time.sleep(wait)
+        r = requests.post(GEMINI_URL, params={"key": GEMINI_API_KEY},
+                          json=payload, timeout=60)
+        _LAST_GEMINI[0] = time.monotonic()
+        if r.status_code == 429:          # rate limit: aspetta e riprova
+            time.sleep(12 * (attempt + 1))
+            continue
+        r.raise_for_status()
+        raw = r.json()["candidates"][0]["content"]["parts"][0]["text"]
+        data = json.loads(raw)
+        cat = data.get("category", "other")
+        if cat not in VALID_CATEGORIES:
+            cat = "other"
+        return {"vgc_related": bool(data.get("vgc_related", True)),
+                "category": cat,
+                "value": data.get("value", "medium"),
+                "reason": data.get("reason", "")}
+    raise RuntimeError("Gemini 429 ripetuto dopo i retry")
 
 
 def classify(text, image_path):
@@ -481,10 +495,18 @@ async def run():
     except Exception as e:
         print(f"  [info] add_account_cookies: {e}")
 
-    seen = load_seen()
+    seen_list = load_seen()
+    seen = set(seen_list)
     ids = load_ids()
     first_run = len(seen) == 0
-    sent = 0
+
+    def mark(t):
+        sid = str(getattr(t, "id", ""))
+        if sid and sid not in seen:
+            seen.add(sid)
+            seen_list.append(sid)
+
+    pending = []  # (id piu' recente del gruppo, group, username)
 
     for username in accounts:
         print(f"\n>> @{username}")
@@ -509,33 +531,44 @@ async def run():
             print(f"  [warn] errore lettura media di @{username}: {e}")
             continue
 
-        # tieni solo i tweet non ancora visti, poi raggruppa per thread
         fresh = [t for t in tweets if str(getattr(t, "id", "")) not in seen]
-        for t in fresh:
-            seen.add(str(getattr(t, "id", "")))  # marca subito (anche se scartato)
+        if not fresh:
+            continue
+        for t in fresh:        # marca SEMPRE i nuovi (anche quelli che non pubblico)
+            mark(t)
 
-        # Niente backlog: al primo giro globale O quando un account e' nuovo,
-        # marca lo storico come 'visto' senza pubblicarlo. Si pubblica solo cio'
-        # che appare DOPO che l'account e' stato aggiunto/incontrato.
+        # Primo giro globale o account nuovo: storico marcato, niente pubblicazione.
         if first_run or new_account:
             if new_account and not first_run:
                 print("  (nuovo account: storico marcato, non pubblicato)")
             continue
 
         for group in build_groups(fresh, uid):
-            if sent >= MAX_POSTS_PER_RUN:
-                break
-            if process_group(group, username):
-                sent += 1
-                time.sleep(2)
+            newest = max(int(getattr(t, "id", 0) or 0) for t in group)
+            pending.append((newest, group, username))
 
-    save_seen(seen)
+    # Pubblica solo i piu' RECENTI fino al tetto; il resto (piu' vecchio) e' gia'
+    # marcato visto -> il canale resta attuale e niente ondate di backlog.
+    pending.sort(key=lambda x: x[0], reverse=True)
+    to_post = pending[:MAX_POSTS_PER_RUN]
+    skipped = len(pending) - len(to_post)
+
+    sent = 0
+    # invio in ordine cronologico (vecchio->nuovo) cosi' il piu' recente resta in fondo
+    for _, group, username in sorted(to_post, key=lambda x: x[0]):
+        if process_group(group, username):
+            sent += 1
+            time.sleep(2)
+
+    save_seen(seen_list)
     save_ids(ids)
     if first_run:
-        print("\nPrima esecuzione: storico marcato come 'visto'. "
-              "Dal prossimo giro pubblico solo i post NUOVI.")
+        print("\nPrima esecuzione: storico marcato. Dal prossimo giro solo i NUOVI.")
     else:
-        print(f"\nFatto. Post (album) pubblicati: {sent}")
+        msg = f"\nFatto. Post pubblicati: {sent}"
+        if skipped:
+            msg += f" | piu' vecchi saltati (gia' marcati visti): {skipped}"
+        print(msg)
 
 
 if __name__ == "__main__":
