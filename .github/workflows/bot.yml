@@ -1,26 +1,36 @@
 name: x-telegram-bot
+
+# Quando gira:
 on:
   schedule:
-    - cron: "*/5 * * * *"
-  workflow_dispatch:
+    - cron: "*/5 * * * *"    # ogni 5 minuti
+  workflow_dispatch:          # + bottone "Run workflow" per lanciarlo a mano
+
+# Serve per ricommittare seen.json (lo stato dei post gia' inviati)
 permissions:
   contents: write
+
+# Evita esecuzioni sovrapposte
 concurrency:
   group: x-telegram-bot
   cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
       - name: Run bot
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -29,17 +39,23 @@ jobs:
           X_COOKIES: ${{ secrets.X_COOKIES }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
+          TWS_RAISE_WHEN_NO_ACCOUNT: "true"
         run: python main.py
-      - name: Save state (seen.json)
+
+      - name: Save state (seen.json + ids.json)
         run: |
-          if [[ -z "$(git status --porcelain seen.json)" ]]; then
+          if [[ -z "$(git status --porcelain seen.json ids.json)" ]]; then
             echo "Nessun cambiamento da salvare."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add seen.json ids.json
-          git commit -m "update seen.json [skip ci]"
+          git commit -m "update state [skip ci]"
+          # prova a pushare integrando eventuali novita' nel frattempo;
+          # in caso di conflitto su seen.json tiene la versione del bot.
           for i in 1 2 3 4 5; do
             git pull --no-rebase -X ours --no-edit origin main || true
             if git push; then
