@@ -92,7 +92,6 @@ zap_vgc
 AnimusVGC
 bbuugsy
 bwentyVGC
-GiulioTarlao
 sharuku_6242
 BehzadVgc
 CarsonConfer
