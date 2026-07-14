@@ -1,9 +1,10 @@
 """
-Bot che legge la MEDIA TAB di account X (via twscrape), raggruppa i THREAD,
-classifica/filtra i contenuti (AI Gemini gratuita con fallback a regole),
-traduce il testo in inglese (lascia stare EN e IT) e pubblica su un canale
-Telegram come album unico, con UNA didascalia per ogni immagine (il testo
-del SUO tweet nel thread).
+Bot che legge la MEDIA TAB di account X (via twscrape), accumula i THREAD in
+un buffer (pending.json) finche' non sono 'assestati' (nessun tweet nuovo da
+THREAD_SETTLE_MINUTES, cosi' non escono mai spezzati), classifica/filtra i
+contenuti (Groq visione -> Gemini -> regole), traduce in inglese con Groq +
+glossario JP->EN dei nomi Pokemon (glossary_ja.json) e pubblica su un canale
+Telegram un album per tweet, in ordine, con link X e XCancel.
 
 Variabili d'ambiente (GitHub Secrets):
   TELEGRAM_TOKEN    -> token del bot (@BotFather)
@@ -25,7 +26,6 @@ import time
 import base64
 import asyncio
 import tempfile
-from collections import defaultdict
 from datetime import datetime, timezone, timedelta
 
 import requests
@@ -58,29 +58,41 @@ GROQ_MODEL = os.environ.get("GROQ_MODEL", "").strip() or "qwen/qwen3.6-27b"
 ACCOUNTS_FILE = "accounts.txt"
 SEEN_FILE = "seen.json"
 IDS_FILE = "ids.json"   # cache username -> id (evita di risolvere ogni giro)
+PENDING_FILE = "pending.json"     # buffer thread in attesa di 'assestamento'
+GLOSSARY_FILE = "glossary_ja.json"  # nomi Pokemon/mosse/item JP -> EN
 
 FETCH_PER_ACCOUNT = 12          # post letti per account ad ogni giro
 MAX_POSTS_PER_RUN = 25          # tetto post (album) inviati per esecuzione
 ACCOUNTS_PER_RUN = 53           # account processati per run (sharding a rotazione)
 CURSOR_KEY = "__cursor__"       # chiave riservata in ids.json per il cursore shard
 MAX_POST_AGE_HOURS = 48         # pubblica solo tweet piu' recenti di X ore (anti-vecchi)
+THREAD_SETTLE_MINUTES = 45      # pubblica un thread solo se fermo da X minuti
 KEEP_LANGUAGES = {"en", "it"}   # lingue da NON tradurre
 CAPTION_LIMIT = 1024            # limite Telegram per didascalia
+
+# DRY_RUN=1: fa tutto (scrape, raggruppa, classifica, traduce) ma NON invia a
+# Telegram e NON salva lo stato. Per testare senza effetti collaterali.
+DRY_RUN = os.environ.get("DRY_RUN", "").strip().lower() in {"1", "true", "yes"}
 
 # --- filtri contenuto ---
 FILTER_ENABLED = True
 DROP_IF_NOT_VGC = True          # scarta i post non legati al VGC
-DROP_CATEGORIES = {"meme"}      # categorie da scartare sempre
-DROP_LOW_VALUE = False          # se True, scarta anche i post "value=low"
+DROP_CATEGORIES = {"meme", "fanart", "merch", "personal"}  # scartate sempre
+DROP_LOW_VALUE = True           # scarta i post "value=low"
+NEVER_DROP_BY_VALUE = {"team_report", "tournament_result"}  # mai scartati per value
 
 # etichette mostrate per categoria
 CATEGORY_TAGS = {
     "team_report": "📋 Team Report",
     "video": "🎥 Video",
     "tournament_result": "🏆 Result",
+    "analysis": "🧠 Analysis",
     "announcement": "📣 Announcement",
     "discussion": "💬 Discussion",
     "meme": "😂 Meme",
+    "fanart": "",
+    "merch": "",
+    "personal": "",
     "other": "",
 }
 
@@ -125,6 +137,22 @@ def save_ids(ids):
         json.dump(ids, f, ensure_ascii=False, indent=0)
 
 
+def load_pending():
+    """Buffer dei thread in attesa: {chiave: {"username": ..., "tweets": [...]}}.
+    La chiave e' "username|conversationId" (due autori nello stesso thread non
+    devono finire nello stesso album)."""
+    try:
+        with open(PENDING_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_pending(pending):
+    with open(PENDING_FILE, "w", encoding="utf-8") as f:
+        json.dump(pending, f, ensure_ascii=False, indent=0)
+
+
 def load_accounts():
     try:
         with open(ACCOUNTS_FILE, "r", encoding="utf-8") as f:
@@ -135,6 +163,71 @@ def load_accounts():
 
 
 # ------------------------------------------------------------------ traduzione
+def _load_glossary():
+    """Glossario JP->EN (specie, mosse, abilita', item, nature) generato da
+    tools/gen_glossary.py. Le chiavi sono gia' ordinate per lunghezza
+    decrescente nel file; riordina comunque per sicurezza (longest-first)."""
+    try:
+        with open(GLOSSARY_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        # via le chiavi pure-hiragana corte (es. あわ "Bubble"): sono anche
+        # parole comuni e, senza spazi in giapponese, corromperebbero il testo
+        hira_corta = re.compile(r"^[぀-ゟ]{1,3}$")
+        items = [(k, v) for k, v in data.items()
+                 if len(k) > 1 and not hira_corta.match(k)]
+        return sorted(items, key=lambda kv: (-len(kv[0]), kv[0]))
+    except (FileNotFoundError, json.JSONDecodeError):
+        print(f"  [warn] glossario {GLOSSARY_FILE} mancante: nomi JP non corretti")
+        return []
+
+
+GLOSSARY = _load_glossary()
+
+
+def apply_glossary(text):
+    """Sostituisce i termini giapponesi col nome inglese ufficiale PRIMA della
+    traduzione: i traduttori storpiano i nomi (カイリュー -> 'Kairyu' invece di
+    Dragonite). Longest-first per non spezzare i nomi composti."""
+    for jp, en in GLOSSARY:
+        if jp in text:
+            text = text.replace(jp, en)
+    return text
+
+
+def groq_translate(text):
+    """Traduzione con Groq: molto piu' naturale di Google Translate e conosce
+    il gergo VGC. Solleva eccezione se fallisce (-> fallback Google)."""
+    prompt = (
+        "Translate this social media post by a competitive Pokemon VGC player "
+        "into natural, fluent English. Keep Pokemon names, move/item/ability "
+        "names and VGC jargon exactly as-is when already in English. Preserve "
+        "line breaks and emoji. Do not add commentary.\n"
+        'Return ONLY JSON: {"translation": "..."}\n'
+        f"POST: {text[:2000]!r}"
+    )
+    payload = {"model": GROQ_MODEL,
+               "messages": [{"role": "user", "content": prompt}],
+               "temperature": 0,
+               "response_format": {"type": "json_object"}}
+    headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
+    for attempt in range(3):
+        wait = GROQ_MIN_INTERVAL - (time.monotonic() - _LAST_GROQ[0])
+        if wait > 0:
+            time.sleep(wait)
+        r = requests.post(GROQ_URL, headers=headers, json=payload, timeout=60)
+        _LAST_GROQ[0] = time.monotonic()
+        if r.status_code == 429:
+            time.sleep(5 * (attempt + 1))
+            continue
+        r.raise_for_status()
+        raw = r.json()["choices"][0]["message"]["content"]
+        out = (json.loads(raw).get("translation") or "").strip()
+        if out:
+            return out
+        raise RuntimeError("traduzione vuota")
+    raise RuntimeError("Groq 429 ripetuto dopo i retry")
+
+
 def translate_to_english(text):
     text = (text or "").strip()
     if not text:
@@ -147,6 +240,12 @@ def translate_to_english(text):
             lang = None
     if lang in KEEP_LANGUAGES:
         return text
+    text = apply_glossary(text)
+    if GROQ_API_KEY:
+        try:
+            return groq_translate(text)
+        except Exception as e:
+            print(f"  [warn] traduzione Groq fallita: {e}")
     try:
         result = GoogleTranslator(source="auto", target="en").translate(text)
         return result or text
@@ -252,14 +351,27 @@ def keyword_classify(text):
 
 def _classify_prompt(text):
     return (
-        "You classify a social media post from a competitive Pokemon VGC "
-        "(Video Game Championships) player. Look at the image and the text.\n"
+        "You curate a feed for competitive Pokemon VGC players. They want only "
+        "USEFUL competitive information; jokes and fluff are noise. Look at the "
+        "image and the text.\n"
         "Return ONLY JSON with keys:\n"
         '  "vgc_related": true/false (is it about competitive Pokemon VGC?),\n'
-        '  "category": one of '
-        '["team_report","video","tournament_result","announcement","discussion","meme","other"],\n'
-        '  "value": "high"|"medium"|"low" (added value for a VGC fan),\n'
+        '  "category": one of ["team_report","tournament_result","analysis",'
+        '"video","announcement","discussion","meme","fanart","merch","personal","other"],\n'
+        '  "value": "high"|"medium"|"low",\n'
         '  "reason": short string.\n'
+        "Category guide:\n"
+        "- team_report: teams, PokePaste, rental codes, EV spreads, damage calcs.\n"
+        "- tournament_result: placements, win/loss records, standings, day 2, top cut.\n"
+        "- analysis: meta/matchup discussion, usage stats, tech explanations.\n"
+        "- announcement: competitively relevant news only (events, rules, formats).\n"
+        "- meme: jokes, reaction images, shitposts (even if Pokemon-themed).\n"
+        "- fanart: drawings/illustrations. merch: merchandise, plushes, cards for "
+        "collecting. personal: food, travel, selfies, life updates.\n"
+        'Value guide: "low" = a competitive player learns nothing actionable '
+        "from it; \"high\" = teams, results, tech they can use.\n"
+        "If torn between a competitive category and a non-competitive one, "
+        "choose the competitive one (better to keep than to lose a team report).\n"
         f"POST TEXT: {text[:1500]!r}"
     )
 
@@ -378,7 +490,10 @@ def should_drop(c):
         return True, "non-VGC"
     if c["category"] in DROP_CATEGORIES:
         return True, f"categoria {c['category']}"
-    if DROP_LOW_VALUE and c.get("value") == "low":
+    # 'low value' non tocca MAI team report e risultati: meglio un falso
+    # positivo in canale che perdere un team.
+    if (DROP_LOW_VALUE and c.get("value") == "low"
+            and c["category"] not in NEVER_DROP_BY_VALUE):
         return True, "low value"
     return False, ""
 
@@ -424,14 +539,16 @@ def tg_send_group(chunk):
 
 def send_album(items):
     """items = lista di (path, kind, caption). Spezza in blocchi da 10."""
+    if DRY_RUN:
+        print("    [dry-run] album NON inviato:")
+        for path, kind, caption in items:
+            preview = (caption or "").replace("\n", " ⏎ ")[:200]
+            print(f"      - {kind}: {os.path.basename(path)}"
+                  + (f" | {preview}" if preview else ""))
+        return True
     ok_any = False
     for start in range(0, len(items), 10):
-        chunk = items[start:start + 10]
-        if len(chunk) == 1:
-            path, kind, caption = chunk[0]
-            ok, info = tg_send_single(path, kind, caption)
-        else:
-            ok, info = tg_send_group(chunk)
+        ok, info = _send_chunk(items[start:start + 10])
         if not ok:
             print(f"  [warn] invio album fallito: {info}")
         ok_any = ok_any or ok
@@ -439,8 +556,55 @@ def send_album(items):
     return ok_any
 
 
-def truncate(text, limit=CAPTION_LIMIT):
-    return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
+def _send_chunk(chunk):
+    """Invia un blocco (1..10 media) senza MAI sollevare eccezioni: gestisce
+    errori di rete e il flood control di Telegram (429 con retry_after)."""
+    for attempt in range(3):
+        try:
+            if len(chunk) == 1:
+                ok, info = tg_send_single(*chunk[0])
+            else:
+                ok, info = tg_send_group(chunk)
+        except requests.RequestException as e:
+            ok, info = False, str(e)
+            time.sleep(3 * (attempt + 1))
+            continue
+        if ok:
+            return True, info
+        retry_after = None
+        try:  # Telegram sul 429 dice quanto aspettare
+            retry_after = json.loads(info).get("parameters", {}).get("retry_after")
+        except Exception:
+            pass
+        if retry_after:
+            time.sleep(min(int(retry_after) + 1, 90))
+            continue
+        return False, info
+    return False, "retry esauriti"
+
+
+def tg_len(text):
+    """Telegram conta didascalie in UTF-16 code unit (emoji/kanji rari = 2)."""
+    return len(text.encode("utf-16-le")) // 2
+
+
+def escape_truncated(text, room):
+    """Tronca il testo GREZZO e poi fa l'escape HTML: cosi' non si spezzano
+    mai le entita' (&amp;...) e il limite e' contato come lo conta Telegram."""
+    text = (text or "").strip()
+    if not text or room <= 0:
+        return ""
+    if tg_len(html.escape(text)) <= room:
+        return html.escape(text)
+    while text and tg_len(html.escape(text)) > room - 1:
+        text = text[:-10]
+    return html.escape(text.rstrip()) + "…"
+
+
+def xcancel_link(link):
+    """Stesso tweet su xcancel.com: leggibile senza account/login X."""
+    return re.sub(r"^https?://(?:www\.)?(?:x|twitter)\.com/",
+                  "https://xcancel.com/", link or "")
 
 
 def first_caption(username, category, is_thread, lead_text, link):
@@ -450,75 +614,97 @@ def first_caption(username, category, is_thread, lead_text, link):
         header += f"  {tag}"
     if is_thread:
         header += "  🧵"
-    link_html = (f'\n\n<a href="{html.escape(link)}">🔗 Original on X</a>'
-                 if link else "")
+    link_html = ""
+    if link:
+        link_html = (f'\n\n<a href="{html.escape(link)}">🔗 X</a> · '
+                     f'<a href="{html.escape(xcancel_link(link))}">🔓 XCancel</a>')
     # tronca SOLO il corpo del testo, preservando header e link
-    body = html.escape(lead_text) if lead_text else ""
-    room = CAPTION_LIMIT - len(header) - len(link_html) - 2
-    if len(body) > room:
-        body = body[:max(0, room - 1)].rstrip() + "…"
+    room = CAPTION_LIMIT - tg_len(header) - tg_len(link_html) - 2
+    body = escape_truncated(lead_text, room)
     cap = header + ("\n\n" + body if body else "") + link_html
     return cap
 
 
 # ------------------------------------------------------------------ gruppi/thread
-def build_groups(tweets, user_id):
-    """Raggruppa i tweet (gia' filtrati a 'non visti') per thread.
-    Ritorna lista di liste di tweet, ognuna ordinata dal piu' vecchio al piu' nuovo,
-    e le liste ordinate cronologicamente."""
-    own = [t for t in tweets if str(getattr(t.user, "id", "")) == str(user_id)]
-    by_conv = defaultdict(list)
-    for t in own:
-        by_conv[str(getattr(t, "conversationId", getattr(t, "id", "")))].append(t)
-    groups = []
-    for conv_tweets in by_conv.values():
-        conv_tweets.sort(key=lambda t: getattr(t, "id", 0))  # vecchio -> nuovo
-        groups.append(conv_tweets)
-    groups.sort(key=lambda g: getattr(g[0], "id", 0))
-    return groups
+def tweet_to_dict(t):
+    """Serializza di un tweet il minimo che serve per pending.json: cosi' un
+    thread puo' aspettare in coda tra un run e l'altro."""
+    d = getattr(t, "date", None)
+    if d is not None and d.tzinfo is None:
+        d = d.replace(tzinfo=timezone.utc)
+    return {
+        "id": int(getattr(t, "id", 0) or 0),
+        "conv": str(getattr(t, "conversationId", "") or getattr(t, "id", "")),
+        "text": clean_tweet_text(getattr(t, "rawContent", "")),
+        "date": d.astimezone(timezone.utc).isoformat() if d else None,
+        "url": getattr(t, "url", "") or "",
+        "media": [[url, kind] for url, kind in collect_media(t)],
+    }
 
 
-def recent_enough(group):
-    """True se il tweet piu' recente del gruppo e' entro MAX_POST_AGE_HOURS.
-    Serve a NON pubblicare vecchi tweet mai marcati (residui del passato)."""
-    newest = None
-    for t in group:
-        d = getattr(t, "date", None)
-        if d is None:
-            continue
-        if d.tzinfo is None:
-            d = d.replace(tzinfo=timezone.utc)
-        if newest is None or d > newest:
-            newest = d
+def _parse_date(iso):
+    if not iso:
+        return None
+    try:
+        return datetime.fromisoformat(iso)
+    except ValueError:
+        return None
+
+
+def newest_date(tweets):
+    dates = [d for d in (_parse_date(t.get("date")) for t in tweets) if d]
+    return max(dates) if dates else None
+
+
+def too_old(tweets):
+    """True se anche il tweet piu' recente del gruppo supera MAX_POST_AGE_HOURS:
+    il gruppo va scartato (marcato visto), non pubblicato."""
+    newest = newest_date(tweets)
     if newest is None:
-        return True  # nessuna data disponibile: non bloccare
-    return (datetime.now(timezone.utc) - newest) <= timedelta(hours=MAX_POST_AGE_HOURS)
+        return False  # nessuna data: non buttare
+    return (datetime.now(timezone.utc) - newest) > timedelta(hours=MAX_POST_AGE_HOURS)
+
+
+def settled(entry):
+    """True se il thread e' 'assestato': l'account e' stato RILETTO (last_fetch)
+    almeno THREAD_SETTLE_MINUTES dopo l'ultimo tweet, senza trovare parti nuove.
+    Contare dall'orologio non basta: con lo sharding un account viene letto un
+    run si' e uno no, e il thread sembrerebbe 'fermo' solo perche' non lo
+    stavamo guardando (-> uscirebbe ancora spezzato)."""
+    newest = newest_date(entry["tweets"])
+    if newest is None:
+        return True
+    ref = _parse_date(entry.get("last_fetch")) or datetime.now(timezone.utc)
+    return (ref - newest) >= timedelta(minutes=THREAD_SETTLE_MINUTES)
 
 
 def process_group(group, username):
-    """Scarica i media, classifica una volta, e pubblica UN ALBUM PER TWEET in
-    ordine cronologico. Cosi' le immagini e il testo di ogni tweet restano
-    insieme e nell'ordine giusto, senza la confusione delle didascalie sparse
-    in un unico album. Ritorna True se ha pubblicato qualcosa."""
+    """group = lista di dict (vedi tweet_to_dict) di UN thread 'assestato'.
+    Scarica i media, traduce, classifica UNA volta sul thread intero, e
+    pubblica UN ALBUM PER TWEET in ordine cronologico. Cosi' le immagini e il
+    testo di ogni tweet restano insieme e nell'ordine giusto.
+    Ritorna: "sent" (pubblicato), "dropped" (scartato dal filtro),
+    "failed" (invio fallito) o "empty" (nessun media scaricabile);
+    su failed/empty il chiamante lo lascia in pending e ritenta."""
+    group = sorted(group, key=lambda t: t["id"])  # vecchio -> nuovo
     is_thread = len(group) > 1
 
-    # per ogni tweet del gruppo: scarica i suoi media e tieni il suo testo
+    # per ogni tweet del gruppo: scarica i suoi media e traduci il suo testo
     per_tweet = []     # [(downloaded=[(path, kind), ...], ttext), ...]
     all_paths = []
     for t in group:
-        ttext = translate_to_english(clean_tweet_text(getattr(t, "rawContent", "")))
         dl = []
-        for url, kind in collect_media(t):
+        for url, kind in t["media"]:
             path, err = download(url)
             if path:
                 dl.append((path, kind))
                 all_paths.append(path)
             else:
                 print(f"  [warn] download fallito {url}: {err}")
-        if dl:
-            per_tweet.append((dl, ttext))
+        if dl:  # traduci solo se c'e' qualcosa da pubblicare
+            per_tweet.append((dl, translate_to_english(t["text"])))
     if not per_tweet:
-        return False
+        return "empty"
 
     def cleanup():
         for p in all_paths:
@@ -527,18 +713,19 @@ def process_group(group, username):
             except OSError:
                 pass
 
-    # classifica UNA volta, sul testo unito del thread + la prima immagine
+    # classifica UNA volta, sul testo unito del thread + la prima immagine:
+    # mai piu' frammenti giudicati (e scartati) fuori contesto
     combined_text = " \n".join(dict.fromkeys(tt for _, tt in per_tweet if tt)) or \
-        translate_to_english(clean_tweet_text(getattr(group[0], "rawContent", "")))
+        translate_to_english(group[0]["text"])
     first_image = next((p for dl, _ in per_tweet for p, k in dl if k == "photo"), None)
     c = classify(combined_text, first_image)
     drop, why = should_drop(c)
     if drop:
-        print(f"  -> SCARTATO ({why}; cat={c['category']})")
+        print(f"  -> SCARTATO ({why}; cat={c['category']}; motivo LLM: {c.get('reason', '')!r})")
         cleanup()
-        return False
+        return "dropped"
 
-    lead_link = getattr(group[0], "url", "")
+    lead_link = group[0]["url"]
     print(f"  -> PUBBLICO ({c['category']}, {len(per_tweet)} tweet, "
           f"{'thread' if is_thread else 'singolo'})")
     ok_any = False
@@ -547,14 +734,14 @@ def process_group(group, username):
             if i == 0:  # primo tweet: header + categoria + link
                 cap = first_caption(username, c["category"], is_thread, ttext, lead_link)
             else:
-                cap = truncate(html.escape(ttext)) if ttext else ""
+                cap = escape_truncated(ttext, CAPTION_LIMIT)
             # la didascalia va sulla PRIMA immagine del tweet = didascalia dell'album
             items = [(path, kind, cap if j == 0 else "")
                      for j, (path, kind) in enumerate(dl)]
             if send_album(items):
                 ok_any = True
             time.sleep(1)
-        return ok_any
+        return "sent" if ok_any else "failed"
     finally:
         cleanup()
 
@@ -577,6 +764,8 @@ async def run():
     else:
         prov = "OFF -> regole"
     print(f"Filtro AI: {prov}")
+    if DRY_RUN:
+        print("*** DRY RUN: niente invii Telegram, niente stato salvato ***")
 
     api = API()
     try:
@@ -587,6 +776,7 @@ async def run():
     seen_list = load_seen()
     seen = set(seen_list)
     ids = load_ids()
+    pending = load_pending()   # thread in attesa, sopravvive tra i run
     first_run = len(seen) == 0
 
     # --- sharding: ogni run processa solo una fetta di account, a rotazione,
@@ -602,13 +792,14 @@ async def run():
     ids[CURSOR_KEY] = cursor + 1
     print(f"Account totali: {n} | letti in questo giro: {len(shard)} (cursor {cursor})")
 
-    def mark(t):
-        sid = str(getattr(t, "id", ""))
-        if sid and sid not in seen:
+    def mark(tid):
+        sid = str(tid)
+        if sid and sid != "0" and sid not in seen:
             seen.add(sid)
             seen_list.append(sid)
 
-    pending = []  # (id piu' recente del gruppo, group, username)
+    # id gia' in coda pending: non vanno ri-aggiunti ai giri successivi
+    buffered = {str(t["id"]) for e in pending.values() for t in e["tweets"]}
 
     for username in shard:
         print(f"\n>> @{username}")
@@ -633,45 +824,102 @@ async def run():
             print(f"  [warn] errore lettura media di @{username}: {e}")
             continue
 
-        fresh = [t for t in tweets if str(getattr(t, "id", "")) not in seen]
+        # letto ORA con successo (anche se senza novita'): aggiorna last_fetch
+        # delle entry pending dell'account — e' il segnale per settled() che
+        # abbiamo ricontrollato e il thread non e' cresciuto
+        now_iso = datetime.now(timezone.utc).isoformat()
+        for e in pending.values():
+            if e["username"].lower() == username.lower():
+                e["last_fetch"] = now_iso
+
+        own = [t for t in tweets
+               if str(getattr(t.user, "id", "")) == str(uid)]
+        fresh = [t for t in own
+                 if str(getattr(t, "id", "")) not in seen
+                 and str(getattr(t, "id", "")) not in buffered]
         if not fresh:
             continue
-        for t in fresh:        # marca SEMPRE i nuovi (anche quelli che non pubblico)
-            mark(t)
 
-        # Primo giro globale o account nuovo: storico marcato, niente pubblicazione.
+        # Primo giro globale o account nuovo: storico marcato, niente coda.
         if first_run or new_account:
+            for t in fresh:
+                mark(getattr(t, "id", ""))
             if new_account and not first_run:
                 print("  (nuovo account: storico marcato, non pubblicato)")
             continue
 
-        for group in build_groups(fresh, uid):
-            if not recent_enough(group):
-                continue  # vecchio: gia' marcato visto sopra, non lo pubblico
-            newest = max(int(getattr(t, "id", 0) or 0) for t in group)
-            pending.append((newest, group, username))
+        # In coda (pending), NON ancora marcati visti: un thread resta in
+        # attesa finche' non e' completo, anche attraverso piu' run.
+        added = 0
+        for t in fresh:
+            td = tweet_to_dict(t)
+            if str(td["id"]) in buffered:   # doppione nello stesso fetch
+                continue
+            if not td["media"]:   # senza media non e' pubblicabile: marca e via
+                mark(td["id"])
+                continue
+            key2 = f"{username.lower()}|{td['conv']}"
+            entry = pending.setdefault(key2, {"username": username, "tweets": []})
+            entry["tweets"].append(td)
+            buffered.add(str(td["id"]))
+            added += 1
+        if added:
+            print(f"  +{added} tweet in coda (pending)")
 
-    # Pubblica solo i piu' RECENTI fino al tetto; il resto (piu' vecchio) e' gia'
-    # marcato visto -> il canale resta attuale e niente ondate di backlog.
-    pending.sort(key=lambda x: x[0], reverse=True)
-    to_post = pending[:MAX_POSTS_PER_RUN]
-    skipped = len(pending) - len(to_post)
+    # --- pubblica SOLO i gruppi 'assestati'; scarta i troppo vecchi ---
+    ready, waiting = [], 0
+    for key2, entry in list(pending.items()):
+        tws = entry["tweets"]
+        if too_old(tws):
+            for t in tws:
+                mark(t["id"])
+            del pending[key2]
+            continue
+        if not settled(entry):
+            waiting += 1
+            continue
+        ready.append((max(t["id"] for t in tws), key2))
+
+    # i piu' RECENTI prima fino al tetto; l'eccedenza NON si perde piu':
+    # resta in pending per il giro dopo (la guardia 48h fa da valvola)
+    ready.sort(reverse=True)
+    to_post = ready[:MAX_POSTS_PER_RUN]
+    left_over = len(ready) - len(to_post)
 
     sent = 0
-    # invio in ordine cronologico (vecchio->nuovo) cosi' il piu' recente resta in fondo
-    for _, group, username in sorted(to_post, key=lambda x: x[0]):
-        if process_group(group, username):
+    # invio in ordine cronologico (vecchio->nuovo): il piu' recente resta in fondo
+    for _, key2 in sorted(to_post):
+        entry = pending[key2]
+        outcome = process_group(entry["tweets"], entry["username"])
+        if outcome in ("failed", "empty"):
+            # NON marcato visto e ancora in pending: si ritenta al giro dopo
+            # (la guardia 48h evita retry infiniti)
+            print(f"  [warn] gruppo non inviato ({outcome}): resta in coda")
+            continue
+        del pending[key2]           # 'sent' o 'dropped': chiuso
+        for t in entry["tweets"]:
+            mark(t["id"])
+        if outcome == "sent":
             sent += 1
             time.sleep(2)
+        if not DRY_RUN:  # salvataggio incrementale: un crash non ripubblica
+            save_seen(seen_list)
+            save_pending(pending)
 
-    save_seen(seen_list)
-    save_ids(ids)
+    if not DRY_RUN:
+        save_seen(seen_list)
+        save_ids(ids)
+        save_pending(pending)
     if first_run:
         print("\nPrima esecuzione: storico marcato. Dal prossimo giro solo i NUOVI.")
     else:
         msg = f"\nFatto. Post pubblicati: {sent}"
-        if skipped:
-            msg += f" | piu' vecchi saltati (gia' marcati visti): {skipped}"
+        if waiting:
+            msg += f" | thread in attesa di assestamento: {waiting}"
+        if left_over:
+            msg += f" | oltre il tetto, restano in coda: {left_over}"
+        if DRY_RUN:
+            msg += "  [dry-run: nessun invio, stato NON salvato]"
         print(msg)
 
 
