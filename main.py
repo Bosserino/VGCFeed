@@ -37,6 +37,14 @@ try:
 except Exception:  # pragma: no cover
     detect_lang = None
 
+# In locale carica le variabili da un file .env (se presente). Su GitHub non
+# esiste .env e le variabili arrivano dai Secrets: questo blocco e' un no-op.
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:  # pragma: no cover
+    pass
+
 # ------------------------------------------------------------------ config
 TOKEN = os.environ.get("TELEGRAM_TOKEN", "").strip()
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
