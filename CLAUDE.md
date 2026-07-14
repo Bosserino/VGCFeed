@@ -4,11 +4,16 @@ Contesto per Claude Code. Leggi questo file prima di lavorare sul progetto.
 
 ## Cosa fa
 Legge la **media tab** di ~106 giocatori competitivi Pokémon VGC su X, traduce il
-testo in inglese (lascia EN/IT), **classifica/filtra** con un LLM (Groq visione →
-Gemini fallback → regole a parole chiave), e pubblica **immagini/video** su un
-**canale Telegram**. I **thread** vengono pubblicati come **un album per tweet**
-(immagini + testo del tweet), in ordine. Gira **gratis su GitHub Actions** (cron
-`*/5`), con lo stato committato nel repo.
+testo in inglese (lascia EN/IT) con **Groq + glossario JP→EN** dei nomi Pokémon
+(`glossary_ja.json`, rigenerabile con `tools/gen_glossary.py`), **classifica/filtra
+severamente** con un LLM (Groq visione → Gemini fallback → regole; passa solo ciò
+che è utile a un player: team report, risultati, analisi, annunci rilevanti), e
+pubblica **immagini/video** su un **canale Telegram** con link X + XCancel. I
+**thread** si accumulano in `pending.json` finché "assestati" (nessun tweet nuovo
+da `THREAD_SETTLE_MINUTES`) e poi escono **interi**, un album per tweet, in ordine.
+Gira **gratis su GitHub Actions** (cron `*/5` + trigger esterno cron-job.org via
+`workflow_dispatch`, perché il cron GitHub da solo parte ogni 1-2h), con lo stato
+committato nel repo.
 
 ## Deploy & run
 - **Deploy = `git push` su `main`.** `.github/workflows/bot.yml` gira su cron `*/5`
@@ -31,15 +36,21 @@ Gemini fallback → regole a parole chiave), e pubblica **immagini/video** su un
    cursore → copertura completa ogni ~2 run, e ogni run resta sotto il rate limit di X.
 3. Per account: risolve l'id (da cache), `user_media(FETCH_PER_ACCOUNT=12)`. Account
    nuovo o primo giro globale → marca "visto" e **non pubblica** (niente backlog).
-4. Raggruppa i tweet in **thread** per `conversationId`. **Guardia data:** solo i
-   tweet ≤ `MAX_POST_AGE_HOURS` (48h) sono pubblicabili; i più vecchi vengono marcati
-   visti e saltati (evita che vecchi tweet mai marcati sembrino "nuovi").
-5. **Newest-first globale:** pubblica i `MAX_POSTS_PER_RUN` (25) gruppi più recenti;
-   l'eccedenza più vecchia viene marcata vista (il canale resta attuale).
-6. `process_group`: scarica i media, **classifica una volta** (Groq→Gemini→regole),
-   scarta non-VGC/meme, poi invia **un album per tweet** (thread splittati per tweet
-   per avere ordine e didascalie corretti).
-7. Salva `seen.json` + `ids.json`; il workflow li ri-committa (merge `-X ours` + retry).
+4. I tweet nuovi (con media) finiscono nel **buffer `pending.json`** raggruppati per
+   `username|conversationId`, **senza** essere marcati visti: un thread aspetta lì
+   anche attraverso più run finché è "assestato" (`THREAD_SETTLE_MINUTES`, 45 min
+   senza tweet nuovi) → mai più thread pubblicati a pezzi. **Guardia data:** i gruppi
+   più vecchi di `MAX_POST_AGE_HOURS` (48h) vengono marcati visti e buttati.
+5. **Newest-first globale:** pubblica i `MAX_POSTS_PER_RUN` (25) gruppi assestati più
+   recenti; l'eccedenza NON si perde: resta in pending per il giro dopo.
+6. `process_group`: scarica i media, **traduce** (Groq + `glossary_ja.json`, fallback
+   Google Translate), **classifica una volta sul thread intero** (Groq→Gemini→regole),
+   scarta meme/fanart/merch/personal/low-value (mai team report e risultati), poi
+   invia **un album per tweet** con link X + XCancel sul primo.
+7. Salva `seen.json` + `ids.json` + `pending.json` (anche incrementale dopo ogni
+   gruppo pubblicato); il workflow li ri-committa (merge `-X ours` + retry).
+   Con `DRY_RUN=1` (env o input del bottone Run workflow): niente invii Telegram e
+   niente salvataggio stato — modalità test senza effetti collaterali.
 
 ## Vincoli & lezioni imparate (NON ri-scoprirle)
 - **X/twscrape:** con **UN solo** account non si leggono 106 profili in <5 min — su
@@ -59,7 +70,8 @@ Gemini fallback → regole a parole chiave), e pubblica **immagini/video** su un
 
 ## Knob di config (in cima a main.py)
 `ACCOUNTS_PER_RUN`, `FETCH_PER_ACCOUNT`, `MAX_POSTS_PER_RUN`, `MAX_POST_AGE_HOURS`,
-`KEEP_LANGUAGES`, `DROP_CATEGORIES`, `DROP_IF_NOT_VGC`, `DROP_LOW_VALUE`.
+`THREAD_SETTLE_MINUTES`, `KEEP_LANGUAGES`, `DROP_CATEGORIES`, `DROP_IF_NOT_VGC`,
+`DROP_LOW_VALUE`, `NEVER_DROP_BY_VALUE`.
 
 ## Secrets / variabili d'ambiente
 `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`, `X_USERNAME`, `X_COOKIES` (`auth_token=..; ct0=..`),
@@ -75,4 +87,5 @@ Nel workflow è impostato `TWS_RAISE_WHEN_NO_ACCOUNT=true`.
 
 ## File principali
 `main.py` · `accounts.txt` · `requirements.txt` · `seen.json` · `ids.json` ·
+`pending.json` · `glossary_ja.json` · `tools/gen_glossary.py` ·
 `.github/workflows/bot.yml` · `README.md` · `.env.example`

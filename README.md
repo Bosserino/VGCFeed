@@ -113,7 +113,32 @@ Costi: **zero per sempre**. Ma trattandosi di un account X "scrapato", ogni tant
 - `DROP_CATEGORIES`   → categorie da scartare sempre (default: `{"meme"}`)
 - `DROP_IF_NOT_VGC`   → scarta i post non-VGC (default: `True`)
 - `DROP_LOW_VALUE`    → scarta anche i post a basso valore (default: `False`)
+- `DROP_LOW_VALUE` + `NEVER_DROP_BY_VALUE` → scarto dei post a basso valore
+  (team report e risultati non vengono MAI scartati per valore)
+- `THREAD_SETTLE_MINUTES` → minuti di quiete prima di pubblicare un thread intero
 - Frequenza: in `.github/workflows/bot.yml`, riga `cron: "*/5 * * * *"`.
+
+## Trigger esterno (cron-job.org)
+Il cron di GitHub su `*/5` è inaffidabile: nella pratica parte ogni 1-2 ore.
+Per run davvero frequenti si usa un cron esterno gratuito che chiama
+`workflow_dispatch` via API:
+
+1. Su GitHub: *Settings → Developer settings → Fine-grained tokens → Generate
+   new token*. Repository: solo questo repo. Permessi: **Actions → Read and
+   write**. Copia il token (`github_pat_…`).
+2. Su [cron-job.org](https://cron-job.org) (account gratuito): crea un cronjob
+   ogni 10 minuti con:
+   - URL: `https://api.github.com/repos/<owner>/<repo>/actions/workflows/bot.yml/dispatches`
+   - Metodo: `POST`, body: `{"ref":"main"}`
+   - Header: `Authorization: Bearer <token>`, `Accept: application/vnd.github+json`,
+     `User-Agent: cronjob`
+3. Il cron `*/5` nel workflow resta come rete di sicurezza; la `concurrency`
+   evita run sovrapposti.
+
+## Test senza effetti collaterali
+Dal bottone **Run workflow** su GitHub, spunta **Dry run**: il bot fa tutto
+(scrape, thread, classificazione, traduzione) ma non invia nulla a Telegram e
+non salva lo stato. In locale: `DRY_RUN=1 python main.py`.
 
 ## Nota
 GitHub disattiva i cron dopo 60 giorni di **inattività** del repo: il bot
