@@ -1,23 +1,4 @@
 {
-"joeux9|2077407155565588843": {
-"username": "JoeUX9",
-"tweets": [
-{
-"id": 2077407155565588843,
-"conv": "2077407155565588843",
-"text": "Keeping up with meta trends and understanding the context of why certain popular teams are good can be helpful, which is what my video today aims to tackle! Check it out to learn more about which teams have been popular and why they are being used!",
-"date": "2026-07-15T14:57:16+00:00",
-"url": "https://x.com/JoeUX9/status/2077407155565588843",
-"media": [
-[
-"https://pbs.twimg.com/media/HNRuzBnWgAA322e.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-15T15:41:52.391012+00:00"
-},
 "vgccorner|2077416586361598225": {
 "username": "vgccorner",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-15T16:02:11.769207+00:00"
 }
 }
