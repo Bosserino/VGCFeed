@@ -1,23 +1,4 @@
 {
-"vgcvictoryroad|2077498442595893279": {
-"username": "VGCVictoryRoad",
-"tweets": [
-{
-"id": 2077498442595893279,
-"conv": "2077498442595893279",
-"text": "Watch some battles from the 2026 Utrecht Regional as highlight matches are showcased! 🔙🇳🇱🏆 #PlayPokemon\n\n🎮 VGC Regulation Set I #PokemonScarletViolet\n📖 All info: \n\n🟣 Live NOW on",
-"date": "2026-07-15T21:00:01+00:00",
-"url": "https://x.com/VGCVictoryRoad/status/2077498442595893279",
-"media": [
-[
-"https://pbs.twimg.com/media/HNQJrl0XkAA2Hu0.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-15T21:41:39.086755+00:00"
-},
 "juanfivgc|2077507065904291885": {
 "username": "JuanfiVGC",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-15T22:02:33.944636+00:00"
 }
 }
