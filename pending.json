@@ -1,23 +1,4 @@
 {
-"lenvgc|2077779090455638089": {
-"username": "LenVGC",
-"tweets": [
-{
-"id": 2077800872269025292,
-"conv": "2077779090455638089",
-"text": "Miniatura de @Luksroq (el goat) 🩷\n\nSolo los reales entendieron la referencia 😎",
-"date": "2026-07-16T17:01:46+00:00",
-"url": "https://x.com/LenVGC/status/2077800872269025292",
-"media": [
-[
-"https://pbs.twimg.com/media/HNXUt2mXoAAKny1.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-16T17:40:57.107226+00:00"
-},
 "riopaser|2077802629996908850": {
 "username": "riopaser",
 "tweets": [
@@ -58,6 +39,6 @@
 ]
 }
 ],
-"last_fetch": "2026-07-16T17:41:12.497044+00:00"
+"last_fetch": "2026-07-16T18:01:40.267434+00:00"
 }
 }
