@@ -1,23 +1,4 @@
 {
-"pokealex_|2077746856730181660": {
-"username": "PokeAlex_",
-"tweets": [
-{
-"id": 2077746856730181660,
-"conv": "2077746856730181660",
-"text": "POKÉMON CHAMPIONS CON ALTARIA \n\nNUEVAS NOTICIAS DE LA NUEVA TEMPORADA DE POKÉMON COMPETITIVO",
-"date": "2026-07-16T13:27:07+00:00",
-"url": "https://x.com/PokeAlex_/status/2077746856730181660",
-"media": [
-[
-"https://pbs.twimg.com/media/HNWjt7zWEAA8axm.png?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-16T14:02:17.411255+00:00"
-},
 "vgcvictoryroad|2077755357967925444": {
 "username": "VGCVictoryRoad",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-16T14:21:29.352241+00:00"
 }
 }
