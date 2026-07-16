@@ -1,27 +1,4 @@
 {
-"spy_anya11|2077675474374082998": {
-"username": "SPY_Anya11",
-"tweets": [
-{
-"id": 2077675474374082998,
-"conv": "2077675474374082998",
-"text": "配信見にきてくれた方ありがとうございました！\n最初使った構築があまりにも勝てなかったのでライチュウY研究に切り替えました。\n明日も続きの配信があります👀",
-"date": "2026-07-16T08:43:29+00:00",
-"url": "https://x.com/SPY_Anya11/status/2077675474374082998",
-"media": [
-[
-"https://pbs.twimg.com/media/HNVi1NPbUAA63mh.jpg?name=large",
-"photo"
-],
-[
-"https://pbs.twimg.com/media/HNVi1NGa8AALi89.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-16T09:21:25.556658+00:00"
-},
 "riopaser|2077681955781353787": {
 "username": "riopaser",
 "tweets": [
@@ -38,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-16T09:41:12.028097+00:00"
 }
 }
