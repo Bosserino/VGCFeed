@@ -17,5 +17,23 @@
 }
 ],
 "last_fetch": "2026-07-17T19:32:03.381322+00:00"
+},
+"lexiconvgc|2078198765090173102": {
+"username": "LexiconVGC",
+"tweets": [
+{
+"id": 2078198765090173102,
+"conv": "2078198765090173102",
+"text": "little Friday laddering",
+"date": "2026-07-17T19:22:51+00:00",
+"url": "https://x.com/LexiconVGC/status/2078198765090173102",
+"media": [
+[
+"https://pbs.twimg.com/media/HNc-P8ibwAAephz.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
