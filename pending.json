@@ -34,7 +34,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-17T00:31:40.593200+00:00"
 },
 "vgcvictoryroad|2077906125043769821": {
 "username": "VGCVictoryRoad",
@@ -48,6 +49,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HNWJAn8XkAA53Ob.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-07-17T00:31:40.593200+00:00"
+},
+"vgcvictoryroad|2077911157109883053": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2077911157109883053,
+"conv": "2077911157109883053",
+"text": "This week's mass outbreak event is live! 🌊🎗️ #PokemonScarletViolet\n\n🕛 Ends: 6 Aug @ 23:59 UTC\n\n📍 Paldea: Catch Spacey Psyduck and Daydreamer Slowpoke\n📍 Kitakami: Catch Arrogant Feebas and Rampaging Basculin\n📍 Terarium: Catch Scholar Lapras\n\n🔗 Info:",
+"date": "2026-07-17T00:20:00+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2077911157109883053",
+"media": [
+[
+"https://pbs.twimg.com/media/HNWMiENXAAAJCcI.jpg?name=large",
 "photo"
 ]
 ]
