@@ -18,25 +18,6 @@
 ],
 "last_fetch": "2026-07-19T02:01:54.787407+00:00"
 },
-"ub_slow|2078649189270212885": {
-"username": "UB_SLOW",
-"tweets": [
-{
-"id": 2078649189270212885,
-"conv": "2078649189270212885",
-"text": "強い6体が強い！",
-"date": "2026-07-19T01:12:40+00:00",
-"url": "https://x.com/UB_SLOW/status/2078649189270212885",
-"media": [
-[
-"https://pbs.twimg.com/media/HNjYa2macAAcnxd.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-19T01:50:58.441881+00:00"
-},
 "yanagit_poke|2078653563866316822": {
 "username": "yanagiT_poke",
 "tweets": [
@@ -72,6 +53,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-19T02:11:19.598909+00:00"
 }
 }
