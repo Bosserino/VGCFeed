@@ -17,5 +17,67 @@
 }
 ],
 "last_fetch": "2026-07-19T22:12:35.410039+00:00"
+},
+"lenvgc|2078965433680490666": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2078967936262520840,
+"conv": "2078965433680490666",
+"text": "VAMOSSSSSS",
+"date": "2026-07-19T22:19:16+00:00",
+"url": "https://x.com/LenVGC/status/2078967936262520840",
+"media": [
+[
+"https://pbs.twimg.com/media/HNn6UPGXMAAo1Ae.jpg?name=large",
+"photo"
+]
+]
+},
+{
+"id": 2078966116584390771,
+"conv": "2078965433680490666",
+"text": "JUANFI A MAMAAAAR",
+"date": "2026-07-19T22:12:02+00:00",
+"url": "https://x.com/LenVGC/status/2078966116584390771",
+"media": [
+[
+"https://pbs.twimg.com/media/HNn4qU8XEAAZ1jb.jpg?name=large",
+"photo"
+]
+]
+},
+{
+"id": 2078965433680490666,
+"conv": "2078965433680490666",
+"text": "CAMPEONES DEL MUNDO",
+"date": "2026-07-19T22:09:19+00:00",
+"url": "https://x.com/LenVGC/status/2078965433680490666",
+"media": [
+[
+"https://pbs.twimg.com/media/HNn4CwVWwAAcXaC.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"pokealex_|2078964273259151749": {
+"username": "PokeAlex_",
+"tweets": [
+{
+"id": 2078964273259151749,
+"conv": "2078964273259151749",
+"text": "VAMOOOOOOOOOOOOOOOOS JODER\n\nVIVA ESPAÑA COÑO QUE FELICIDAD\n\nQUE ORGULLO DE SELECCIÓN Y DE PAÍS\n\nNOS LO MERECÍAMOS",
+"date": "2026-07-19T22:04:42+00:00",
+"url": "https://x.com/PokeAlex_/status/2078964273259151749",
+"media": [
+[
+"https://pbs.twimg.com/media/HNn28KGXYAAF5Nf.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
