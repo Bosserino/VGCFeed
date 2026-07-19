@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-19T01:21:38.398296+00:00"
+"last_fetch": "2026-07-19T01:42:03.542479+00:00"
 },
 "ub_slow|2078649189270212885": {
 "username": "UB_SLOW",
@@ -30,6 +30,24 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HNjYa2macAAcnxd.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"yanagit_poke|2078653563866316822": {
+"username": "yanagiT_poke",
+"tweets": [
+{
+"id": 2078653563866316822,
+"conv": "2078653563866316822",
+"text": "配信中に改善した部分がうまくはまって2200までこれた！\n漢のガブ1メガ",
+"date": "2026-07-19T01:30:03+00:00",
+"url": "https://x.com/yanagiT_poke/status/2078653563866316822",
+"media": [
+[
+"https://pbs.twimg.com/media/HNjcZF0aAAAXVxC.jpg?name=large",
 "photo"
 ]
 ]
