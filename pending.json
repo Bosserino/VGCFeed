@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-20T18:21:26.904979+00:00"
+"last_fetch": "2026-07-20T18:41:25.438068+00:00"
 },
 "pokealex_|2079266717654560924": {
 "username": "PokeAlex_",
@@ -36,5 +36,23 @@
 }
 ],
 "last_fetch": "2026-07-20T18:32:13.589371+00:00"
+},
+"joeux9|2079274483462934922": {
+"username": "JoeUX9",
+"tweets": [
+{
+"id": 2079274483462934922,
+"conv": "2079274483462934922",
+"text": "I was asked to build a Mega Mawile team for Pokémon's website! It shares many similarities with the team I used to win the charity tournament a few weeks ago, since that team started from this original concept. The article includes the replica code if you'd like to try it out!",
+"date": "2026-07-20T18:37:22+00:00",
+"url": "https://x.com/JoeUX9/status/2079274483462934922",
+"media": [
+[
+"https://pbs.twimg.com/media/HNr5hbyWkAAWWlC.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
