@@ -23,7 +23,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-22T16:02:54.301534+00:00"
 },
 "btrickroomz|2079922494665093364": {
 "username": "BTrickroomZ",
@@ -45,6 +46,25 @@
 ],
 [
 "https://pbs.twimg.com/media/HN16_uubUAAjRMG.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-07-22T16:02:54.301534+00:00"
+},
+"andybakesyt|2079958994068578727": {
+"username": "AndyBakesYT",
+"tweets": [
+{
+"id": 2079958994068578727,
+"conv": "2079958994068578727",
+"text": "It’s a damn shame they nerfed Salt Cure. This guy would’ve been a really cool “Anti-Toxapex-Toxapex”",
+"date": "2026-07-22T15:57:22+00:00",
+"url": "https://x.com/AndyBakesYT/status/2079958994068578727",
+"media": [
+[
+"https://pbs.twimg.com/media/HN1_rfjW8AAf6S1.jpg?name=large",
 "photo"
 ]
 ]
