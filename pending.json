@@ -24,7 +24,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-22T17:51:23.189902+00:00"
+"last_fetch": "2026-07-22T18:11:00.053465+00:00"
 },
 "lenvgc|2079983377118040552": {
 "username": "LenVGC",
@@ -38,6 +38,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HN2V21CXcAA1Euo.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-07-22T18:11:15.704225+00:00"
+},
+"lenvgc|2079984422263136345": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2079984422263136345,
+"conv": "2079984422263136345",
+"text": "Overqwil da Demasiado Asco en Pokémon Champions",
+"date": "2026-07-22T17:38:25+00:00",
+"url": "https://x.com/LenVGC/status/2079984422263136345",
+"media": [
+[
+"https://pbs.twimg.com/media/HN2WzRHW4AAK8NP.jpg?name=large",
 "photo"
 ]
 ]
