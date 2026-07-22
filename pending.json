@@ -24,7 +24,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-22T17:21:02.005635+00:00"
+"last_fetch": "2026-07-22T17:37:03.035589+00:00"
 },
 "pokealex_|2079972800157130780": {
 "username": "PokeAlex_",
@@ -48,5 +48,23 @@
 }
 ],
 "last_fetch": "2026-07-22T17:30:59.640906+00:00"
+},
+"lenvgc|2079983377118040552": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2079983377118040552,
+"conv": "2079983377118040552",
+"text": "Overqwill da Demasiado Asco en Pokémon Champions",
+"date": "2026-07-22T17:34:15+00:00",
+"url": "https://x.com/LenVGC/status/2079983377118040552",
+"media": [
+[
+"https://pbs.twimg.com/media/HN2V21CXcAA1Euo.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
