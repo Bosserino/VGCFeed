@@ -70,5 +70,23 @@
 ]
 }
 ]
+},
+"vgccorner|2079961323505344739": {
+"username": "vgccorner",
+"tweets": [
+{
+"id": 2079961323505344739,
+"conv": "2079961323505344739",
+"text": "Rethought the damage calc\n\nThis should make creating spreads from scratch much easier\n\n- live sliders are mapped to the top meta game pokemon and speed tiers\n- as the sliders move up/down, the calcs change that effect the stat\n- you can click a calc to pin the calc to the pokemon and share with friends\n- powered by the smogon open source damage calc\n- speed tiers were calculated off of usage stats and a few rules I manually put in\n\nStill WIP, this will be launched with the teambuilder. Both will be ad-free and free to use.",
+"date": "2026-07-22T16:06:37+00:00",
+"url": "https://x.com/vgccorner/status/2079961323505344739",
+"media": [
+[
+"https://video.twimg.com/amplify_video/2079959872141963264/vid/avc1/1420x674/YoP729ZSnVPg1LKW.mp4?tag=29",
+"video"
+]
+]
+}
+]
 }
 }
