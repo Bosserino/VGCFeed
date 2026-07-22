@@ -1,23 +1,4 @@
 {
-"btrickroomz|2079922494665093364": {
-"username": "BTrickroomZ",
-"tweets": [
-{
-"id": 2079922494665093364,
-"conv": "2079922494665093364",
-"text": "配信開始　コノヨザルは本当に強い？？",
-"date": "2026-07-22T13:32:20+00:00",
-"url": "https://x.com/BTrickroomZ/status/2079922494665093364",
-"media": [
-[
-"https://pbs.twimg.com/media/HN1ee5ab0AECVyu.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-22T14:11:40.009830+00:00"
-},
 "vgcvictoryroad|2079929462846845051": {
 "username": "VGCVictoryRoad",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-22T14:27:35.537888+00:00"
 }
 }
