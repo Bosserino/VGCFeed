@@ -24,7 +24,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-23T21:02:07.064449+00:00"
+"last_fetch": "2026-07-23T21:21:41.457334+00:00"
 },
 "pokealex_|2080390224534777958": {
 "username": "PokeAlex_",
@@ -44,5 +44,23 @@
 }
 ],
 "last_fetch": "2026-07-23T21:11:08.502965+00:00"
+},
+"lexiconvgc|2080402656288522643": {
+"username": "LexiconVGC",
+"tweets": [
+{
+"id": 2080402656288522643,
+"conv": "2080402656288522643",
+"text": "surely i will gain ladder rating by using Mega Garchomp",
+"date": "2026-07-23T21:20:19+00:00",
+"url": "https://x.com/LexiconVGC/status/2080402656288522643",
+"media": [
+[
+"https://pbs.twimg.com/media/HN8SF31bYAAyMT2.png?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
