@@ -24,7 +24,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-24T10:11:48.068573+00:00"
+"last_fetch": "2026-07-24T10:31:51.883181+00:00"
 },
 "yanagit_poke|2080593599646073025": {
 "username": "yanagiT_poke",
@@ -38,6 +38,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HN_A1-sawAA0guC.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-07-24T10:30:59.004228+00:00"
+},
+"yanagit_poke|2080596830170316829": {
+"username": "yanagiT_poke",
+"tweets": [
+{
+"id": 2080596830170316829,
+"conv": "2080596830170316829",
+"text": "2300！(10位かよ、、)",
+"date": "2026-07-24T10:11:54+00:00",
+"url": "https://x.com/yanagiT_poke/status/2080596830170316829",
+"media": [
+[
+"https://pbs.twimg.com/media/HN_Dybca0AA1kpa.jpg?name=large",
 "photo"
 ]
 ]
