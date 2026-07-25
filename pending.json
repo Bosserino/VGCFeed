@@ -53,7 +53,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-25T11:10:57.818792+00:00"
 },
 "btrickroomz|2080966515541832086": {
 "username": "BTrickroomZ",
@@ -67,6 +68,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HOEUAyQbgAAOVz0.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-07-25T11:11:14.094480+00:00"
+},
+"cona_5757|2080971726721286610": {
+"username": "cona_5757",
+"tweets": [
+{
+"id": 2080971726721286610,
+"conv": "2080971726721286610",
+"text": "打ち上げの都合で早めに離脱......\nありがとうございました！楽しかったです！",
+"date": "2026-07-25T11:01:36+00:00",
+"url": "https://x.com/cona_5757/status/2080971726721286610",
+"media": [
+[
+"https://pbs.twimg.com/media/HOEYv9bbIAA0k-t.jpg?name=large",
 "photo"
 ]
 ]
