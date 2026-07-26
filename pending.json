@@ -18,25 +18,6 @@
 ],
 "last_fetch": "2026-07-26T05:01:38.330569+00:00"
 },
-"huyubare_poke|2081232220166230022": {
-"username": "Huyubare_Poke",
-"tweets": [
-{
-"id": 2081232220166230022,
-"conv": "2081232220166230022",
-"text": "鰻うおおおおおお",
-"date": "2026-07-26T04:16:43+00:00",
-"url": "https://x.com/Huyubare_Poke/status/2081232220166230022",
-"media": [
-[
-"https://pbs.twimg.com/media/HOIFpqsbMAADThn.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-26T04:51:35.108430+00:00"
-},
 "cona_5757|2081236655357456763": {
 "username": "cona_5757",
 "tweets": [
@@ -54,6 +35,24 @@
 ]
 }
 ],
-"last_fetch": "2026-07-26T04:50:53.813217+00:00"
+"last_fetch": "2026-07-26T05:10:41.990016+00:00"
+},
+"thekingvillager|2081243776748589562": {
+"username": "TheKingVillager",
+"tweets": [
+{
+"id": 2081243776748589562,
+"conv": "2081243776748589562",
+"text": "Words Prep going even better than Last Year’s",
+"date": "2026-07-26T05:02:38+00:00",
+"url": "https://x.com/TheKingVillager/status/2081243776748589562",
+"media": [
+[
+"https://video.twimg.com/amplify_video/2081243477216579584/vid/avc1/720x1280/jUOHDgpixOqzF33w.mp4?tag=29",
+"video"
+]
+]
+}
+]
 }
 }
