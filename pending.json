@@ -16,6 +16,24 @@
 ]
 }
 ],
-"last_fetch": "2026-07-26T11:50:47.435971+00:00"
+"last_fetch": "2026-07-26T12:10:47.555315+00:00"
+},
+"ub_slow|2081348452722909565": {
+"username": "UB_SLOW",
+"tweets": [
+{
+"id": 2081348452722909565,
+"conv": "2081348452722909565",
+"text": "ポチャオフ優勝‼️",
+"date": "2026-07-26T11:58:35+00:00",
+"url": "https://x.com/UB_SLOW/status/2081348452722909565",
+"media": [
+[
+"https://pbs.twimg.com/media/HOJvYlqaIAAtE7r.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
