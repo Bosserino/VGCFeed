@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-26T15:41:47.111362+00:00"
+"last_fetch": "2026-07-26T16:01:59.071303+00:00"
 },
 "nicky030526|2081399847001960491": {
 "username": "nicky030526",
@@ -30,6 +30,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HOKeFJ3a0AAf8Ox.png?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-07-26T16:01:35.297463+00:00"
+},
+"pokealex_|2081406764507894030": {
+"username": "PokeAlex_",
+"tweets": [
+{
+"id": 2081406764507894030,
+"conv": "2081406764507894030",
+"text": "Pokémon PROLOCKE 2 \n\nEMPEZAMOS LA AVENTURA\n\nHAY QUE GANAR ESTA SERIE",
+"date": "2026-07-26T15:50:17+00:00",
+"url": "https://x.com/PokeAlex_/status/2081406764507894030",
+"media": [
+[
+"https://pbs.twimg.com/media/HOKkYqJXcAASwFw.jpg?name=large",
 "photo"
 ]
 ]
