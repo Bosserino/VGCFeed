@@ -35,6 +35,24 @@
 ]
 }
 ],
-"last_fetch": "2026-07-27T17:31:08.493348+00:00"
+"last_fetch": "2026-07-27T17:50:47.459467+00:00"
+},
+"lenvgc|2081769433337303161": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2081795376969818623,
+"conv": "2081769433337303161",
+"text": "@MiaSkylar tú sabes muchas cosas eh",
+"date": "2026-07-27T17:34:30+00:00",
+"url": "https://x.com/LenVGC/status/2081795376969818623",
+"media": [
+[
+"https://pbs.twimg.com/media/HOQF2qGXQAEwkI6.png?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
