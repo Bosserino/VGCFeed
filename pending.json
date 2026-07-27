@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-27T19:50:54.261493+00:00"
+"last_fetch": "2026-07-27T20:10:46.597793+00:00"
 },
 "andybakesyt|2081763183463899303": {
 "username": "AndyBakesYT",
@@ -35,25 +35,28 @@
 ]
 }
 ],
-"last_fetch": "2026-07-27T19:52:13.267328+00:00"
+"last_fetch": "2026-07-27T20:11:40.232945+00:00"
 },
-"michaelderbeste|2081821339938070841": {
-"username": "MichaelDerbeste",
+"stickbugged_lol|2081829761211638047": {
+"username": "stickbugged_lol",
 "tweets": [
 {
-"id": 2081821339938070841,
-"conv": "2081821339938070841",
-"text": "First meal in France ( 💀 )",
-"date": "2026-07-27T19:17:40+00:00",
-"url": "https://x.com/MichaelderBeste/status/2081821339938070841",
+"id": 2081829761211638047,
+"conv": "2081829761211638047",
+"text": "i reached this rank on ladder at this tournament with this pokemon! it's really good and has so much potential\n\nhere's the team if anyone wants to try",
+"date": "2026-07-27T19:51:08+00:00",
+"url": "https://x.com/stickbugged_lol/status/2081829761211638047",
 "media": [
 [
-"https://pbs.twimg.com/media/HOQdd_FXMAA9piS.jpg?name=large",
+"https://pbs.twimg.com/media/HOQlHyoWAAAZP3J.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HOQlIWgWoAA0sII.jpg?name=large",
 "photo"
 ]
 ]
 }
-],
-"last_fetch": "2026-07-27T19:52:03.274122+00:00"
+]
 }
 }
