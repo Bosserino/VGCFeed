@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-28T18:11:38.324405+00:00"
+"last_fetch": "2026-07-28T18:32:13.504371+00:00"
 },
 "andybakesyt|2081763183463899303": {
 "username": "AndyBakesYT",
@@ -36,5 +36,27 @@
 }
 ],
 "last_fetch": "2026-07-28T18:21:37.673504+00:00"
+},
+"prro_t93|2082167071471759552": {
+"username": "Prro_T93",
+"tweets": [
+{
+"id": 2082167071471759552,
+"conv": "2082167071471759552",
+"text": "Got 2 Spectator Passes for Worlds SF 2026\nFull multi-day access + Pokémon XP experience + Sunday Arena (finals).\nDM if you’re interested 🙏",
+"date": "2026-07-28T18:11:29+00:00",
+"url": "https://x.com/Prro_T93/status/2082167071471759552",
+"media": [
+[
+"https://pbs.twimg.com/media/HOVX6fwWIAAQfW2.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HOVX6fzXEAAizMv.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
