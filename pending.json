@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-28T14:12:36.258295+00:00"
+"last_fetch": "2026-07-28T14:32:35.028618+00:00"
 },
 "andybakesyt|2081763183463899303": {
 "username": "AndyBakesYT",
@@ -36,24 +36,5 @@
 }
 ],
 "last_fetch": "2026-07-28T14:21:53.079094+00:00"
-},
-"ashtoncoxgaz|2082099378026668228": {
-"username": "AshtonCoxGAZ",
-"tweets": [
-{
-"id": 2082099378026668228,
-"conv": "2082099378026668228",
-"text": "Where did the balloons go????",
-"date": "2026-07-28T13:42:29+00:00",
-"url": "https://x.com/AshtonCoxGAZ/status/2082099378026668228",
-"media": [
-[
-"https://pbs.twimg.com/media/HOUaWYAXsAAx2ha.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-28T14:12:18.608795+00:00"
 }
 }
