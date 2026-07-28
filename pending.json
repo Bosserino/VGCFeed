@@ -35,7 +35,7 @@
 ]
 }
 ],
-"last_fetch": "2026-07-28T03:01:43.411277+00:00"
+"last_fetch": "2026-07-28T03:21:28.356417+00:00"
 },
 "sunoru_sidw|2081933215875379563": {
 "username": "sunoru_sidw",
@@ -55,5 +55,23 @@
 }
 ],
 "last_fetch": "2026-07-28T03:10:59.776610+00:00"
+},
+"marc0fier0|2081941903688310807": {
+"username": "marc0fier0",
+"tweets": [
+{
+"id": 2081941903688310807,
+"conv": "2081941903688310807",
+"text": "grandi 6",
+"date": "2026-07-28T03:16:45+00:00",
+"url": "https://x.com/marc0fier0/status/2081941903688310807",
+"media": [
+[
+"https://pbs.twimg.com/media/HOSLH1NXoAAc7aD.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
