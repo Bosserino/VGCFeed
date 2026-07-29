@@ -17,5 +17,23 @@
 }
 ],
 "last_fetch": "2026-07-29T09:22:12.282686+00:00"
+},
+"yanagit_poke|2082393889080783039": {
+"username": "yanagiT_poke",
+"tweets": [
+{
+"id": 2082393889080783039,
+"conv": "2082393889080783039",
+"text": "#まいにちコータス",
+"date": "2026-07-29T09:12:46+00:00",
+"url": "https://x.com/yanagiT_poke/status/2082393889080783039",
+"media": [
+[
+"https://pbs.twimg.com/media/HOYmLrIbMAAHBdI.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
