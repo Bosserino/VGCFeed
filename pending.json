@@ -1,23 +1,4 @@
 {
-"pokealex_|2083151128619807141": {
-"username": "PokeAlex_",
-"tweets": [
-{
-"id": 2083151128619807141,
-"conv": "2083151128619807141",
-"text": "Nunca habría dicho que este Pokémon podría ser TAN bueno en el Prolocke.\n\nLe estoy cogiendo muchísimo cariño a Swellow.",
-"date": "2026-07-31T11:21:46+00:00",
-"url": "https://x.com/PokeAlex_/status/2083151128619807141",
-"media": [
-[
-"https://pbs.twimg.com/media/HOjWAO1XkAAf4Zh.png?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-31T12:01:46.434618+00:00"
-},
 "shadeviera|2083158813449076798": {
 "username": "SHADEviera",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-31T12:21:16.244604+00:00"
 }
 }
