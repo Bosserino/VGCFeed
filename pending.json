@@ -1,23 +1,4 @@
 {
-"chuppavgc|2083264783344648606": {
-"username": "ChuppaVGC",
-"tweets": [
-{
-"id": 2083264783344648606,
-"conv": "2083264783344648606",
-"text": "It's been a great year, here's to 29 🎉",
-"date": "2026-07-31T18:53:24+00:00",
-"url": "https://x.com/ChuppaVGC/status/2083264783344648606",
-"media": [
-[
-"https://pbs.twimg.com/media/HOk-R2lWUAAcvlS.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-07-31T19:21:45.975045+00:00"
-},
 "mattiemoovgc|2083271523314393165": {
 "username": "MattieMooVGC",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-07-31T19:41:18.075385+00:00"
 }
 }
