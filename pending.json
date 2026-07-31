@@ -17,5 +17,23 @@
 }
 ],
 "last_fetch": "2026-07-31T11:21:19.532245+00:00"
+},
+"pokealex_|2083151128619807141": {
+"username": "PokeAlex_",
+"tweets": [
+{
+"id": 2083151128619807141,
+"conv": "2083151128619807141",
+"text": "Nunca habría dicho que este Pokémon podría ser TAN bueno en el Prolocke.\n\nLe estoy cogiendo muchísimo cariño a Swellow.",
+"date": "2026-07-31T11:21:46+00:00",
+"url": "https://x.com/PokeAlex_/status/2083151128619807141",
+"media": [
+[
+"https://pbs.twimg.com/media/HOjWAO1XkAAf4Zh.png?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
