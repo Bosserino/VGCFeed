@@ -71,23 +71,5 @@
 ]
 }
 ]
-},
-"mihono_suica|2083934176202592396": {
-"username": "mihono_suica",
-"tweets": [
-{
-"id": 2083934176202592396,
-"conv": "2083934176202592396",
-"text": "VRなんとかトップカット",
-"date": "2026-08-02T15:13:19+00:00",
-"url": "https://x.com/mihono_suica/status/2083934176202592396",
-"media": [
-[
-"https://pbs.twimg.com/media/HOufFgTbAAAiruP.jpg?name=large",
-"photo"
-]
-]
-}
-]
 }
 }
