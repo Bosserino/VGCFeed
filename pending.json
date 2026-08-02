@@ -1,42 +1,4 @@
 {
-"cona_5757|2083873119534813570": {
-"username": "cona_5757",
-"tweets": [
-{
-"id": 2083873119534813570,
-"conv": "2083873119534813570",
-"text": "",
-"date": "2026-08-02T11:10:42+00:00",
-"url": "https://x.com/cona_5757/status/2083873119534813570",
-"media": [
-[
-"https://pbs.twimg.com/media/HOtnjwTa4AA7wgV.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-02T11:51:10.600492+00:00"
-},
-"terasquareoffl|2083872585239101600": {
-"username": "TeraSquareOffl",
-"tweets": [
-{
-"id": 2083872585239101600,
-"conv": "2083872585239101600",
-"text": "【配信中】 テラスクエア#91 準々決勝　 \n\n(@mactea_dayo )\n vs \n(@R3nVGC )\n\n 配信リンクはこちら▼",
-"date": "2026-08-02T11:08:35+00:00",
-"url": "https://x.com/TeraSquareOffl/status/2083872585239101600",
-"media": [
-[
-"https://pbs.twimg.com/media/HOtnCyDa0AAfZ3L.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-02T11:51:19.557121+00:00"
-},
 "terasquareoffl|2083880084348534870": {
 "username": "TeraSquareOffl",
 "tweets": [
@@ -54,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-02T11:51:19.557121+00:00"
+"last_fetch": "2026-08-02T12:11:20.155281+00:00"
 },
 "lenvgc|2083622146031358315": {
 "username": "LenVGC",
@@ -73,6 +35,6 @@
 ]
 }
 ],
-"last_fetch": "2026-08-02T11:51:44.264922+00:00"
+"last_fetch": "2026-08-02T12:11:43.871860+00:00"
 }
 }
