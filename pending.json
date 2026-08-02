@@ -1,23 +1,4 @@
 {
-"lenvgc|2083922237132849182": {
-"username": "LenVGC",
-"tweets": [
-{
-"id": 2083928891647770670,
-"conv": "2083922237132849182",
-"text": "@danilovaz_art buenas tardes",
-"date": "2026-08-02T14:52:19+00:00",
-"url": "https://x.com/LenVGC/status/2083928891647770670",
-"media": [
-[
-"https://video.twimg.com/amplify_video/2083928877575884800/vid/avc1/640x360/agQFUmhqBciEeU0K.mp4?tag=29",
-"video"
-]
-]
-}
-],
-"last_fetch": "2026-08-02T15:31:53.824230+00:00"
-},
 "mihono_suica|2083934176202592396": {
 "username": "mihono_suica",
 "tweets": [
@@ -34,7 +15,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-02T15:51:03.507870+00:00"
 },
 "vgcvictoryroad|2083935802581475692": {
 "username": "VGCVictoryRoad",
@@ -52,7 +34,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-02T15:51:26.095555+00:00"
 },
 "torvivvgc|2083930479191900353": {
 "username": "TorvivVGC",
@@ -66,6 +49,43 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HOugaKWXcAAWE5g.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-08-02T15:51:40.967420+00:00"
+},
+"vgcvictoryroad|2083942550935630173": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2083942550935630173,
+"conv": "2083942550935630173",
+"text": "These are the Top 8 players at the VR August Challenge! 🎉\n\nEach of them is guaranteed $85 and are battling to raise that! 💸",
+"date": "2026-08-02T15:46:36+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2083942550935630173",
+"media": [
+[
+"https://pbs.twimg.com/media/HOump9UXUAAGkmF.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"lenvgc|2083940636773011856": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2083940636773011856,
+"conv": "2083940636773011856",
+"text": "",
+"date": "2026-08-02T15:39:00+00:00",
+"url": "https://x.com/LenVGC/status/2083940636773011856",
+"media": [
+[
+"https://pbs.twimg.com/media/HOuXSJ1W8AAO29O.jpg?name=large",
 "photo"
 ]
 ]
