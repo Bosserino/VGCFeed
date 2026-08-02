@@ -1,21 +1,20 @@
 {
-"lenvgc|2083918828786880722": {
+"lenvgc|2083922237132849182": {
 "username": "LenVGC",
 "tweets": [
 {
-"id": 2083919260733125023,
-"conv": "2083918828786880722",
-"text": "yo tengo este",
-"date": "2026-08-02T14:14:03+00:00",
-"url": "https://x.com/LenVGC/status/2083919260733125023",
+"id": 2083928891647770670,
+"conv": "2083922237132849182",
+"text": "@danilovaz_art buenas tardes",
+"date": "2026-08-02T14:52:19+00:00",
+"url": "https://x.com/LenVGC/status/2083928891647770670",
 "media": [
 [
-"https://video.twimg.com/amplify_video/2083919233507905536/vid/avc1/640x360/skQg6MLEfgnzwkTf.mp4?tag=29",
+"https://video.twimg.com/amplify_video/2083928877575884800/vid/avc1/640x360/agQFUmhqBciEeU0K.mp4?tag=29",
 "video"
 ]
 ]
 }
-],
-"last_fetch": "2026-08-02T14:51:38.681075+00:00"
+]
 }
 }
