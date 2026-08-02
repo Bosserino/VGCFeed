@@ -1,23 +1,4 @@
 {
-"shadeviera|2083910978111214028": {
-"username": "SHADEviera",
-"tweets": [
-{
-"id": 2083910978111214028,
-"conv": "2083910978111214028",
-"text": "【雨晴れスイッチ⁉️】リザードンのバグレベルの奇襲に注意！⚠️2天候って使いこなせるのか・・・？ 【 ポケモンチャンピオンズ ダブルバトル M-B】 @YouTubeより \n\nリザバナペリブリを使ったぞ😁",
-"date": "2026-08-02T13:41:09+00:00",
-"url": "https://x.com/SHADEviera/status/2083910978111214028",
-"media": [
-[
-"https://pbs.twimg.com/media/HOuJ3sKbEAAwo1z.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-02T14:20:58.143892+00:00"
-},
 "vgcvictoryroad|2083915725408723126": {
 "username": "VGCVictoryRoad",
 "tweets": [
@@ -72,6 +53,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-02T14:40:52.146566+00:00"
 }
 }
