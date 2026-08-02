@@ -1,23 +1,4 @@
 {
-"terasquareoffl|2083862875144384727": {
-"username": "TeraSquareOffl",
-"tweets": [
-{
-"id": 2083862875144384727,
-"conv": "2083862875144384727",
-"text": "ダブルバトル大会 テラスクエア #91 ft. もすかてる, まさのり, Ren, NoFace, ももかわ, にゅ, かえで(楓), まえうぇあ 【ポケモンチャンピオンズ】\n \n\n@Moscate1oon \n@TPeBS8AXQy23608 \n@R3nVGC \n@kayaup_LaPaPa03 \n@Momokawa1002 \n@mactea_dayo \n@0101fe_ \n@rna1war3_poke",
-"date": "2026-08-02T10:30:00+00:00",
-"url": "https://x.com/TeraSquareOffl/status/2083862875144384727",
-"media": [
-[
-"https://pbs.twimg.com/media/HOpc1OSaUAAIZ_f.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-02T11:01:58.268183+00:00"
-},
 "lenvgc|2083870424027590696": {
 "username": "LenVGC",
 "tweets": [
@@ -34,7 +15,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-02T11:21:47.599459+00:00"
 },
 "yanagit_poke|2083872542541152593": {
 "username": "yanagiT_poke",
@@ -48,6 +30,42 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HOtnCIFaUAEDZ0O.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"cona_5757|2083873119534813570": {
+"username": "cona_5757",
+"tweets": [
+{
+"id": 2083873119534813570,
+"conv": "2083873119534813570",
+"text": "",
+"date": "2026-08-02T11:10:42+00:00",
+"url": "https://x.com/cona_5757/status/2083873119534813570",
+"media": [
+[
+"https://pbs.twimg.com/media/HOtnjwTa4AA7wgV.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"terasquareoffl|2083872585239101600": {
+"username": "TeraSquareOffl",
+"tweets": [
+{
+"id": 2083872585239101600,
+"conv": "2083872585239101600",
+"text": "【配信中】 テラスクエア#91 準々決勝　 \n\n(@mactea_dayo )\n vs \n(@R3nVGC )\n\n 配信リンクはこちら▼",
+"date": "2026-08-02T11:08:35+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2083872585239101600",
+"media": [
+[
+"https://pbs.twimg.com/media/HOtnCyDa0AAfZ3L.jpg?name=large",
 "photo"
 ]
 ]
