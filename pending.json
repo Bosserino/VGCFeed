@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-02T14:11:02.587680+00:00"
+"last_fetch": "2026-08-02T14:20:58.143892+00:00"
 },
 "vgcvictoryroad|2083915725408723126": {
 "username": "VGCVictoryRoad",
@@ -50,6 +50,24 @@
 [
 "https://video.twimg.com/amplify_video/2083919233507905536/vid/avc1/640x360/skQg6MLEfgnzwkTf.mp4?tag=29",
 "video"
+]
+]
+}
+]
+},
+"pokealex_|2083919358586151056": {
+"username": "PokeAlex_",
+"tweets": [
+{
+"id": 2083919358586151056,
+"conv": "2083919358586151056",
+"text": "Analicé las 317 Habilidades de Pokémon.",
+"date": "2026-08-02T14:14:27+00:00",
+"url": "https://x.com/PokeAlex_/status/2083919358586151056",
+"media": [
+[
+"https://pbs.twimg.com/media/HOuRnBfWsAAlylS.jpg?name=large",
+"photo"
 ]
 ]
 }
