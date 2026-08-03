@@ -1,23 +1,4 @@
 {
-"yanagit_poke|2084268427301327122": {
-"username": "yanagiT_poke",
-"tweets": [
-{
-"id": 2084268427301327122,
-"conv": "2084268427301327122",
-"text": "【上位帯18連勝！？】【ダブルバトル】メガムクホーク✖️メガバンギラスが最強すぎた！【ポケモンチャンピオンズ】 @YouTubeより \n\n18連勝した構築の動画投稿しました！一気にレートが300上がりました。めっちゃ強い",
-"date": "2026-08-03T13:21:31+00:00",
-"url": "https://x.com/yanagiT_poke/status/2084268427301327122",
-"media": [
-[
-"https://pbs.twimg.com/media/HOzPBkWbAAE9UND.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-03T13:50:58.146477+00:00"
-},
 "huyubare_poke|2084273261920334125": {
 "username": "Huyubare_Poke",
 "tweets": [
@@ -36,5 +17,23 @@
 }
 ],
 "last_fetch": "2026-08-03T14:01:50.965996+00:00"
+},
+"yanagit_poke|2084278462408519775": {
+"username": "yanagiT_poke",
+"tweets": [
+{
+"id": 2084278462408519775,
+"conv": "2084278462408519775",
+"text": "一位復活〜〜〜！",
+"date": "2026-08-03T14:01:24+00:00",
+"url": "https://x.com/yanagiT_poke/status/2084278462408519775",
+"media": [
+[
+"https://pbs.twimg.com/media/HOzYNt1bwAERAnq.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
