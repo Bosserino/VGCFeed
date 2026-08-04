@@ -16,25 +16,28 @@
 ]
 }
 ],
-"last_fetch": "2026-08-04T13:41:39.794561+00:00"
+"last_fetch": "2026-08-04T14:01:57.513206+00:00"
 },
-"lenvgc|2084627258119950723": {
-"username": "LenVGC",
+"vgcvictoryroad|2084640505753927970": {
+"username": "VGCVictoryRoad",
 "tweets": [
 {
-"id": 2084627258119950723,
-"conv": "2084627258119950723",
-"text": "Gané un Torneo de 100 Personas con Tyranitar Excadrill",
-"date": "2026-08-04T13:07:23+00:00",
-"url": "https://x.com/LenVGC/status/2084627258119950723",
+"id": 2084640505753927970,
+"conv": "2084640505753927970",
+"text": "⌛️ It's just 12 HOURS until the end of #PokemonChampions Ranked Battles Season M-4! 🪜\n\nRush the ladder, try to enter the Top 300 and reach the coveted Champion Tier! 📈\n\nGet all your Season M-4 Battle Pass rewards as well before it's too late! 🎁",
+"date": "2026-08-04T14:00:01+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2084640505753927970",
 "media": [
 [
-"https://pbs.twimg.com/media/HO4PxP7XAAAgsEp.jpg?name=large",
+"https://pbs.twimg.com/media/HO3RVJjXMAA7HEv.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HO3RV-sWcAAdNzG.jpg?name=large",
 "photo"
 ]
 ]
 }
-],
-"last_fetch": "2026-08-04T13:42:20.861219+00:00"
+]
 }
 }
