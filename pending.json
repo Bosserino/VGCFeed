@@ -15,7 +15,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-04T15:41:35.116964+00:00"
 },
 "andybakesyt|2084660277782413721": {
 "username": "AndyBakesYT",
@@ -30,6 +31,29 @@
 [
 "https://video.twimg.com/tweet_video/HO4zeGKW0AAr--F.mp4",
 "video"
+]
+]
+}
+],
+"last_fetch": "2026-08-04T15:41:51.743794+00:00"
+},
+"btrickroomz|2084662589582373146": {
+"username": "BTrickroomZ",
+"tweets": [
+{
+"id": 2084662589582373146,
+"conv": "2084662589582373146",
+"text": "誕生日にチャンピオン級で13連勝！！\n繁忙期で超絶激務すぎてこれ以上上目指す体力は残ってないので撤退へ…💤\n今年はオフ会とかの成績アベレージは上がった一方で肝心の世界権利を取れてないのでまたいつの日かどこかで勝てるように下積みを頑張ります🙏",
+"date": "2026-08-04T15:27:47+00:00",
+"url": "https://x.com/BTrickroomZ/status/2084662589582373146",
+"media": [
+[
+"https://pbs.twimg.com/media/HO41kb_bAAAICwX.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HO41kcAaoAA_saK.jpg?name=large",
+"photo"
 ]
 ]
 }
