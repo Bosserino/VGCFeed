@@ -80,7 +80,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-05T06:41:36.321903+00:00"
 },
 "vgcvictoryroad|2084889640100659378": {
 "username": "VGCVictoryRoad",
@@ -116,6 +117,24 @@
 ],
 [
 "https://pbs.twimg.com/media/HO8AsAiXoAAXXII.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"sharuku_6242|2084892546392862958": {
+"username": "sharuku_6242",
+"tweets": [
+{
+"id": 2084892546392862958,
+"conv": "2084892546392862958",
+"text": "チャンピオン級🙆‍♂️\nM-Bだいぶ感触良くなってきた",
+"date": "2026-08-05T06:41:33+00:00",
+"url": "https://x.com/sharuku_6242/status/2084892546392862958",
+"media": [
+[
+"https://pbs.twimg.com/media/HO8Gt8na4AAj-LP.jpg?name=large",
 "photo"
 ]
 ]
