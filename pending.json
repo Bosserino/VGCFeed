@@ -1,23 +1,4 @@
 {
-"vgcvictoryroad|2084897192414765069": {
-"username": "VGCVictoryRoad",
-"tweets": [
-{
-"id": 2084897192414765069,
-"conv": "2084897192414765069",
-"text": "Final Top 8 at the doubles Ranked Battles Season M-4! 🥳 #PokemonChampions\n\n🥇 2,535: 🇸🇬 @magicauravgc\n🥈 2,509: 🇯🇵 @yanagiT_poke\n🥉 2,506: 🇯🇵 @Huyubare_Poke\n2,503: 🇺🇸 Washy\n2,502: 🇯🇵 @mihono_suica\n2,493: 🇯🇵 @Berumotto565651\n2,493: 🇯🇵 @mariruripokemo2\n2,490: 🇯🇵 @kinurincipall",
-"date": "2026-08-05T07:00:00+00:00",
-"url": "https://x.com/VGCVictoryRoad/status/2084897192414765069",
-"media": [
-[
-"https://pbs.twimg.com/media/HO8FeHVW0AA3osr.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-05T07:31:52.859891+00:00"
-},
 "huyubare_poke|2084902731496759468": {
 "username": "Huyubare_Poke",
 "tweets": [
@@ -42,6 +23,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-05T07:51:50.601956+00:00"
 }
 }
