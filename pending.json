@@ -19,7 +19,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-05T06:31:38.528933+00:00"
 },
 "vgcvictoryroad|2084884828990718325": {
 "username": "VGCVictoryRoad",
@@ -37,7 +38,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-05T06:31:50.791064+00:00"
 },
 "vgcvictoryroad|2084882095260783082": {
 "username": "VGCVictoryRoad",
@@ -55,7 +57,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-05T06:31:50.791064+00:00"
 },
 "meninojardim|2084886094454169988": {
 "username": "MeninoJardim",
@@ -73,6 +76,46 @@
 ],
 [
 "https://pbs.twimg.com/media/HO8A2c-XAAAKJiR.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"vgcvictoryroad|2084889640100659378": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2084889640100659378,
+"conv": "2084889640100659378",
+"text": "🚨 Regulation Set M-B 🚨\n\nAlongside the news of Season M-5, the current ruleset has been extended for one week, and will now finish on 9 September! 🗓️\n\nIt does not affect any currently announced tournaments 👍\n\n🔗 All info:",
+"date": "2026-08-05T06:30:00+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2084889640100659378",
+"media": [
+[
+"https://pbs.twimg.com/media/HO8DtdaWQAAiO28.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"vgcvictoryroad|2084887123631690007": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2084887123631690007,
+"conv": "2084887123631690007",
+"text": "Ranked Battles Season M-5 has already started, and will be up until 9 September! 🪜\n\n🎮 Regulation Set M-B\n\n⚠️ Champion Tier and Master Ball Tiers 1 to 3 will be unlocked on 12 August!\n\n🔗 All 2027 events:",
+"date": "2026-08-05T06:20:00+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2084887123631690007",
+"media": [
+[
+"https://pbs.twimg.com/media/HO8ApmhXAAAHn07.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HO8AsAiXoAAXXII.jpg?name=large",
 "photo"
 ]
 ]
