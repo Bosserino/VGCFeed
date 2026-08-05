@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-05T23:10:55.073463+00:00"
+"last_fetch": "2026-08-05T23:31:04.116844+00:00"
 },
 "vgcvictoryroad|2085138788150395041": {
 "username": "VGCVictoryRoad",
@@ -68,6 +68,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HO_ogXJbMAARNa6.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-08-05T23:31:43.858702+00:00"
+},
+"paul_chua_|2085142902812864526": {
+"username": "Paul_Chua_",
+"tweets": [
+{
+"id": 2085142902812864526,
+"conv": "2085142902812864526",
+"text": "",
+"date": "2026-08-05T23:16:22+00:00",
+"url": "https://x.com/Paul_Chua_/status/2085142902812864526",
+"media": [
+[
+"https://pbs.twimg.com/media/HO_qa4PW4AAg1cI.jpg?name=large",
 "photo"
 ]
 ]
