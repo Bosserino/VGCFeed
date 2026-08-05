@@ -15,6 +15,61 @@
 ]
 ]
 }
+],
+"last_fetch": "2026-08-05T22:12:17.312734+00:00"
+},
+"ub_slow|2085123333776195864": {
+"username": "UB_SLOW",
+"tweets": [
+{
+"id": 2085123333776195864,
+"conv": "2085123333776195864",
+"text": "最終16位でした！\n次はもっと上へ",
+"date": "2026-08-05T21:58:37+00:00",
+"url": "https://x.com/UB_SLOW/status/2085123333776195864",
+"media": [
+[
+"https://pbs.twimg.com/media/HO_YnqDaIAAfIdT.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"vgcvictoryroad|2085123683560161647": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2085123683560161647,
+"conv": "2085123683560161647",
+"text": "🚨 Sign-ups for the 🇧🇷 Recife Regional are now OPEN! #PlayPokemon #PokemonChampions\n\n📍 Olinda, Brazil\n🗓️ 3–4 Oct 2026\n🎫 R$230 (MA), R$150 (SR/JR)\n📝 Sign up:",
+"date": "2026-08-05T22:00:00+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2085123683560161647",
+"media": [
+[
+"https://pbs.twimg.com/media/HO-sLVEWsAAPlCd.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"cybertronvgc|2085123591285182565": {
+"username": "CybertronVGC",
+"tweets": [
+{
+"id": 2085123591285182565,
+"conv": "2085123591285182565",
+"text": "Mega Falinks...",
+"date": "2026-08-05T21:59:38+00:00",
+"url": "https://x.com/CybertronVGC/status/2085123591285182565",
+"media": [
+[
+"https://pbs.twimg.com/media/HO_Y1qxXsAE0jjH.png?name=large",
+"photo"
+]
+]
+}
 ]
 }
 }
