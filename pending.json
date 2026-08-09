@@ -1,23 +1,4 @@
 {
-"vgcvictoryroad|2086511740695486607": {
-"username": "VGCVictoryRoad",
-"tweets": [
-{
-"id": 2086511740695486607,
-"conv": "2086511740695486607",
-"text": "It's time for the FINALS of the VR August Challenge #2! 🏆\n\n🇩🇪 @MichaelderBeste🆚 🇪🇨 @slucin03 \n\nMichael: \nJuan: \n\nWinner takes $890. Runner-up takes $445. Who will win it all? 💸",
-"date": "2026-08-09T17:55:39+00:00",
-"url": "https://x.com/VGCVictoryRoad/status/2086511740695486607",
-"media": [
-[
-"https://pbs.twimg.com/media/HPTHXBFWoAAPY8q.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-09T18:21:00.043658+00:00"
-},
 "pokealex_|2086512513693225160": {
 "username": "PokeAlex_",
 "tweets": [
@@ -35,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-09T18:21:35.939619+00:00"
+"last_fetch": "2026-08-09T18:42:02.252688+00:00"
 },
 "vgcvictoryroad|2086517455732486151": {
 "username": "VGCVictoryRoad",
@@ -53,6 +34,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-09T18:41:06.732320+00:00"
 }
 }
