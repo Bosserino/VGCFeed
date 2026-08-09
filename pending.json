@@ -1,23 +1,4 @@
 {
-"vgcvictoryroad|2086498507238613027": {
-"username": "VGCVictoryRoad",
-"tweets": [
-{
-"id": 2086498507238613027,
-"conv": "2086498507238613027",
-"text": "These are the Top 8 players at the VR August Challenge #2! 🎉\n\nEach of them is guaranteed $110 and are battling to raise that! 💸",
-"date": "2026-08-09T17:03:04+00:00",
-"url": "https://x.com/VGCVictoryRoad/status/2086498507238613027",
-"media": [
-[
-"https://pbs.twimg.com/media/HPS7PUAW8AAM9bD.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-09T17:37:19.785604+00:00"
-},
 "vgcvictoryroad|2086504587448426639": {
 "username": "VGCVictoryRoad",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-09T17:51:15.851258+00:00"
 }
 }
