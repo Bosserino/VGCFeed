@@ -1,23 +1,4 @@
 {
-"terasquareoffl|2086424259216490868": {
-"username": "TeraSquareOffl",
-"tweets": [
-{
-"id": 2086424259216490868,
-"conv": "2086424259216490868",
-"text": "【配信中】\nテラスクエア#92 決勝\n\nキム(@kim0227poke)\nvs\nDEYANSU(@DEYANSU8)\n\n配信リンクはこちら▼",
-"date": "2026-08-09T12:08:01+00:00",
-"url": "https://x.com/TeraSquareOffl/status/2086424259216490868",
-"media": [
-[
-"https://pbs.twimg.com/media/HPR22cQbIAAVX1O.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-09T12:41:18.001353+00:00"
-},
 "cona_5757|2086430593819217921": {
 "username": "cona_5757",
 "tweets": [
@@ -31,6 +12,93 @@
 [
 "https://video.twimg.com/tweet_video/HPR9kSuaQAExmr-.mp4",
 "video"
+]
+]
+}
+],
+"last_fetch": "2026-08-09T13:01:34.812198+00:00"
+},
+"terasquareoffl|2086437343372943726": {
+"username": "TeraSquareOffl",
+"tweets": [
+{
+"id": 2086437704200520148,
+"conv": "2086437343372943726",
+"text": "",
+"date": "2026-08-09T13:01:27+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2086437704200520148",
+"media": [
+[
+"https://pbs.twimg.com/media/HPSD_tnaUAIYxH8.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HPSD_tuaEAAuEGg.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HPSD_tuasAAh7hD.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HPSD_txbEAAwdhj.jpg?name=large",
+"photo"
+]
+]
+},
+{
+"id": 2086437617504305181,
+"conv": "2086437343372943726",
+"text": "",
+"date": "2026-08-09T13:01:06+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2086437617504305181",
+"media": [
+[
+"https://pbs.twimg.com/media/HPSD4RUbYAA0uUn.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HPSD4RHaIAAi5DG.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HPSD4RLawAA1vgC.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HPSD4PiasAAbzjy.jpg?name=large",
+"photo"
+]
+]
+},
+{
+"id": 2086437343372943726,
+"conv": "2086437343372943726",
+"text": "テラスクエア#92　大会結果\n#レギュレーションMB #RegulationMB #ダブルバトル",
+"date": "2026-08-09T13:00:01+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2086437343372943726",
+"media": [
+[
+"https://pbs.twimg.com/media/HPSDr5fbIAAwtPR.jpg?name=large",
+"photo"
+]
+]
+}
+]
+},
+"terasquareoffl|2086437227270389808": {
+"username": "TeraSquareOffl",
+"tweets": [
+{
+"id": 2086437227270389808,
+"conv": "2086437227270389808",
+"text": "第92回チャンピオンは キム!!\nCongratulations!!\n(@kim0227poket)",
+"date": "2026-08-09T12:59:33+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2086437227270389808",
+"media": [
+[
+"https://pbs.twimg.com/media/HPSDh4ia8AAHoP9.jpg?name=large",
+"photo"
 ]
 ]
 }
