@@ -1,44 +1,4 @@
 {
-"btrickroomz|2087542929070154094": {
-"username": "BTrickroomZ",
-"tweets": [
-{
-"id": 2087543815066488933,
-"conv": "2087542929070154094",
-"text": "@yadon_lab2",
-"date": "2026-08-12T14:16:44+00:00",
-"url": "https://x.com/BTrickroomZ/status/2087543815066488933",
-"media": [
-[
-"https://pbs.twimg.com/media/HPhyBdObQAAUTVD.jpg?name=large",
-"photo"
-]
-]
-},
-{
-"id": 2087542929070154094,
-"conv": "2087542929070154094",
-"text": "配信あざした！配信内で最終ここ着地\n火力あるガオガエン+リザYが強いんじゃないかと思って試してみた！\nHB手助けリザ、木炭ガエン、スカーフ岩封ガブが単体性能とズラしを両立できてて良かったが、噛み合いが起きちゃうのはご愛嬌\n使い方はアーカイブから！\n\n参考にした構築↓",
-"date": "2026-08-12T14:13:13+00:00",
-"url": "https://x.com/BTrickroomZ/status/2087542929070154094",
-"media": [
-[
-"https://pbs.twimg.com/media/HPhxN-baQAE2D4W.jpg?name=large",
-"photo"
-],
-[
-"https://pbs.twimg.com/media/HPhxN-YaQAAoOBl.jpg?name=large",
-"photo"
-],
-[
-"https://pbs.twimg.com/media/HPhxN-KbQAAfb4_.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-12T14:51:47.764975+00:00"
-},
 "desuvgc|2087548644287283200": {
 "username": "DesuVGC",
 "tweets": [
@@ -55,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-12T15:11:39.047988+00:00"
 }
 }
