@@ -1,23 +1,4 @@
 {
-"lexiconvgc|2087620909423358097": {
-"username": "LexiconVGC",
-"tweets": [
-{
-"id": 2087620909423358097,
-"conv": "2087620909423358097",
-"text": "overcoming my fear of \"Worlds Teams\" through exposure therapy",
-"date": "2026-08-12T19:23:05+00:00",
-"url": "https://x.com/LexiconVGC/status/2087620909423358097",
-"media": [
-[
-"https://pbs.twimg.com/media/HPi3X9wboAA8mai.png?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-12T20:01:22.793170+00:00"
-},
 "vgcvictoryroad|2087630199579922654": {
 "username": "VGCVictoryRoad",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-12T20:21:22.461869+00:00"
 }
 }
