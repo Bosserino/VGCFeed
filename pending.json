@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-13T19:50:44.264115+00:00"
+"last_fetch": "2026-08-13T20:03:01.750086+00:00"
 },
 "pokealex_|2087986215580582095": {
 "username": "PokeAlex_",
@@ -30,6 +30,24 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HPoEYZjXcAAQIHe.png?name=large",
+"photo"
+]
+]
+}
+]
+},
+"lexiconvgc|2087990785308549572": {
+"username": "LexiconVGC",
+"tweets": [
+{
+"id": 2087990785308549572,
+"conv": "2087990785308549572",
+"text": "revealing everybody's worlds teams live",
+"date": "2026-08-13T19:52:50+00:00",
+"url": "https://x.com/LexiconVGC/status/2087990785308549572",
+"media": [
+[
+"https://pbs.twimg.com/media/HPoIGPcbIAAxb8s.png?name=large",
 "photo"
 ]
 ]
