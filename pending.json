@@ -66,8 +66,39 @@
 "photo"
 ]
 ]
+},
+{
+"id": 2087916488292245546,
+"conv": "2087905548700176760",
+"text": "@Mallendary",
+"date": "2026-08-13T14:57:37+00:00",
+"url": "https://x.com/LenVGC/status/2087916488292245546",
+"media": [
+[
+"https://pbs.twimg.com/media/HPnE-qpW8AA7Onx.png?name=large",
+"photo"
+]
+]
 }
 ],
-"last_fetch": "2026-08-13T14:51:24.815055+00:00"
+"last_fetch": "2026-08-13T15:05:17.880999+00:00"
+},
+"vgcvictoryroad|2087917104892723330": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2087917104892723330,
+"conv": "2087917104892723330",
+"text": "We're glad to announce that we will host a stream for the Victory Road to San Francisco! 📺🥳 #PokemonChampions\n\n🗓️ 15–16 Aug, 13:00 UTC\n🎙️ @AshtonCoxGAZ @TalonVGC @MLBDVGC @Enigne_ @Shonatron_ @illoustrationsz \n🟣 \n🔴",
+"date": "2026-08-13T15:00:04+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2087917104892723330",
+"media": [
+[
+"https://pbs.twimg.com/media/HPm5TiZXoAAj-Ne.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
