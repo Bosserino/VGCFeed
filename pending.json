@@ -20,7 +20,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T18:01:12.910608+00:00"
+"last_fetch": "2026-08-16T18:20:52.983618+00:00"
 },
 "terasquareoffl|2088838508815511967": {
 "username": "TeraSquareOffl",
@@ -39,7 +39,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T18:01:12.910608+00:00"
+"last_fetch": "2026-08-16T18:20:52.983618+00:00"
 },
 "vgcvictoryroad|2089043646670594234": {
 "username": "VGCVictoryRoad",
@@ -58,6 +58,24 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T18:01:29.677184+00:00"
+"last_fetch": "2026-08-16T18:21:12.108216+00:00"
+},
+"vgcvictoryroad|2089054814936133709": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2089054814936133709,
+"conv": "2089054814936133709",
+"text": "🏆 Victory Road to San Francisco 🏆\n\nPhase 2 — Round 7\n🇪🇸 Juan Manuel Odriozola (@JMOdriVGC) vs 🇮🇹 Francesco Iozzia (@youngniva)\n\nJuan Manuel: \nFrancesco: \n\n🎙️ @Shonatron_ @MLBDVGC\n📲 #PokemonChampions\n🟣",
+"date": "2026-08-16T18:20:55+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2089054814936133709",
+"media": [
+[
+"https://pbs.twimg.com/media/HP3QQMjXoAE6v8l.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
