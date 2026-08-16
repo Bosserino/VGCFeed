@@ -20,7 +20,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T04:07:16.492457+00:00"
+"last_fetch": "2026-08-16T04:20:51.461355+00:00"
 },
 "terasquareoffl|2088838508815511967": {
 "username": "TeraSquareOffl",
@@ -38,7 +38,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-16T04:20:51.461355+00:00"
 },
 "hirosipoke|2088836511571792170": {
 "username": "hirosipoke",
@@ -56,6 +57,25 @@
 ],
 [
 "https://pbs.twimg.com/media/HP0Ju_Ma0AAR6jS.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-08-16T04:21:12.286620+00:00"
+},
+"terasquareoffl|2088840136398348603": {
+"username": "TeraSquareOffl",
+"tweets": [
+{
+"id": 2088840136398348603,
+"conv": "2088840136398348603",
+"text": "EXTREME ダブルバトル DAY2\nTOP32\n\nMel's選手(@_Mel2s_ )\nVS\nぶんば選手(@bunbachan )\n\n🔴 \n🗒️ \n\n#EXTREMEオフ\n#ポケモンチャンピオンズ #ポケチャン",
+"date": "2026-08-16T04:07:51+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2088840136398348603",
+"media": [
+[
+"https://pbs.twimg.com/media/HP0NBYnboAAqrc2.jpg?name=large",
 "photo"
 ]
 ]
