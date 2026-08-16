@@ -20,7 +20,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T13:31:31.666571+00:00"
+"last_fetch": "2026-08-16T13:44:54.020550+00:00"
 },
 "terasquareoffl|2088838508815511967": {
 "username": "TeraSquareOffl",
@@ -39,6 +39,24 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T13:31:31.666571+00:00"
+"last_fetch": "2026-08-16T13:44:54.020550+00:00"
+},
+"vgcvictoryroad|2088980201107562887": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2088980201107562887,
+"conv": "2088980201107562887",
+"text": "🏆 Victory Road to San Francisco 🏆\n\nPhase 2 — Round 1\n🇬🇷 Kosta Daidimos (@TheGreekKoala) vs 🇯🇵 Shohei Kimura (@zeen172M)\n\nKosta: \nShohei: \n\n🎙️ @illoustrationsz @AshtonCoxGAZ\n📲 #PokemonChampions\n🟣",
+"date": "2026-08-16T13:24:25+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2088980201107562887",
+"media": [
+[
+"https://pbs.twimg.com/media/HP2MXthXYAA4PNP.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
