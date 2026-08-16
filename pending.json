@@ -58,7 +58,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-16T20:32:38.261408+00:00"
+"last_fetch": "2026-08-16T20:50:50.413578+00:00"
 },
 "vgcvictoryroad|2089085663467495848": {
 "username": "VGCVictoryRoad",
@@ -72,6 +72,25 @@
 "media": [
 [
 "https://pbs.twimg.com/media/HP3sTM1XQAAnFHf.jpg?name=large",
+"photo"
+]
+]
+}
+],
+"last_fetch": "2026-08-16T20:50:50.413578+00:00"
+},
+"vgcvictoryroad|2089092434009473042": {
+"username": "VGCVictoryRoad",
+"tweets": [
+{
+"id": 2089092434009473042,
+"conv": "2089092434009473042",
+"text": "These are the Top 8 players at the Victory Road to San Francisco! 🎉\n\nEach of them is guaranteed $250 and are battling to raise that! 💸",
+"date": "2026-08-16T20:50:24+00:00",
+"url": "https://x.com/VGCVictoryRoad/status/2089092434009473042",
+"media": [
+[
+"https://pbs.twimg.com/media/HP3yeonWYAAG71y.jpg?name=large",
 "photo"
 ]
 ]
