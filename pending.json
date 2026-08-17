@@ -16,6 +16,24 @@
 ]
 }
 ],
-"last_fetch": "2026-08-17T19:21:14.642135+00:00"
+"last_fetch": "2026-08-17T19:41:08.679948+00:00"
+},
+"lexiconvgc|2089436813060682080": {
+"username": "LexiconVGC",
+"tweets": [
+{
+"id": 2089436813060682080,
+"conv": "2089436813060682080",
+"text": "searching for the sauce (hopefully not too spicy I have a low tolerance unfort)",
+"date": "2026-08-17T19:38:50+00:00",
+"url": "https://x.com/LexiconVGC/status/2089436813060682080",
+"media": [
+[
+"https://pbs.twimg.com/media/HP8rYg9a4AEstOm.png?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
