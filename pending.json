@@ -16,6 +16,24 @@
 ]
 }
 ],
-"last_fetch": "2026-08-17T11:31:39.222294+00:00"
+"last_fetch": "2026-08-17T11:51:27.168446+00:00"
+},
+"ub_slow|2089287249389400136": {
+"username": "UB_SLOW",
+"tweets": [
+{
+"id": 2089312954189762925,
+"conv": "2089287249389400136",
+"text": "@alaninepoke これで提出\n次は勝ちます！",
+"date": "2026-08-17T11:26:40+00:00",
+"url": "https://x.com/UB_SLOW/status/2089312954189762925",
+"media": [
+[
+"https://pbs.twimg.com/media/HP67Do-boAAi3Kw.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
