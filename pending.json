@@ -1,23 +1,4 @@
 {
-"lenvgc|2089648237204410799": {
-"username": "LenVGC",
-"tweets": [
-{
-"id": 2089729911778852934,
-"conv": "2089648237204410799",
-"text": "@xDarth_Traderx",
-"date": "2026-08-18T15:03:30+00:00",
-"url": "https://x.com/LenVGC/status/2089729911778852934",
-"media": [
-[
-"https://pbs.twimg.com/media/HQA2R5HWQAAS1-6.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-18T15:41:58.281648+00:00"
-},
 "lenvgc|2089734838278349250": {
 "username": "LenVGC",
 "tweets": [
@@ -34,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-18T16:01:21.990233+00:00"
 }
 }
