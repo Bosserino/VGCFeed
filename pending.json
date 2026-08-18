@@ -17,5 +17,23 @@
 }
 ],
 "last_fetch": "2026-08-18T20:51:06.360478+00:00"
+},
+"lexiconvgc|2089815882264645979": {
+"username": "LexiconVGC",
+"tweets": [
+{
+"id": 2089815882264645979,
+"conv": "2089815882264645979",
+"text": "Tub Takes! We'll recap the VR tour and other news tonight @ 7:30pm Central, and then follow that up with a Worlds Draft featuring @adisubra @NailsOU @WillBrown_vgc @MichaelderBeste @RaphaelBagara @EternalSnowman and myself!",
+"date": "2026-08-18T20:45:07+00:00",
+"url": "https://x.com/LexiconVGC/status/2089815882264645979",
+"media": [
+[
+"https://pbs.twimg.com/media/HQCD57sbwAA1TdS.png?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
