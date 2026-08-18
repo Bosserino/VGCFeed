@@ -1,23 +1,4 @@
 {
-"lexiconvgc|2089761127161094274": {
-"username": "LexiconVGC",
-"tweets": [
-{
-"id": 2089761127161094274,
-"conv": "2089761127161094274",
-"text": "9 years ago today! I fought the reigning World Champion here (who's name is escaping me rn), and then his finalist opponent the very next round",
-"date": "2026-08-18T17:07:33+00:00",
-"url": "https://x.com/LexiconVGC/status/2089761127161094274",
-"media": [
-[
-"https://pbs.twimg.com/media/HQBSP6HbsAAP9J0.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-18T17:45:32.986674+00:00"
-},
 "lenvgc|2089734838278349250": {
 "username": "LenVGC",
 "tweets": [
@@ -35,6 +16,6 @@
 ]
 }
 ],
-"last_fetch": "2026-08-18T17:45:34.265148+00:00"
+"last_fetch": "2026-08-18T18:02:07.210916+00:00"
 }
 }
