@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-19T17:14:31.408322+00:00"
+"last_fetch": "2026-08-19T17:31:23.364506+00:00"
 },
 "vgcvictoryroad|2090119098432659579": {
 "username": "VGCVictoryRoad",
@@ -35,7 +35,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-19T17:14:31.408322+00:00"
+"last_fetch": "2026-08-19T17:31:23.364506+00:00"
 },
 "montana_pokemon|2090121620870312410": {
 "username": "Montana_Pokemon",
@@ -54,7 +54,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-19T17:14:45.385232+00:00"
+"last_fetch": "2026-08-19T17:31:37.646620+00:00"
 },
 "lorcylovesyou|2090119563543249386": {
 "username": "lorcylovesyou",
@@ -74,5 +74,27 @@
 }
 ],
 "last_fetch": "2026-08-19T17:21:22.984048+00:00"
+},
+"lenvgc|2089457082659401730": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2090128352166264921,
+"conv": "2089457082659401730",
+"text": "@BadassFroslass @MJessVGC Here is the original text. I realize the translation might be a bit confusing; I didn't notice that, in addition to translating from Spanish to English, the new EVs/stat points had been swapped for the old ones. Thanks for pointing that out, I'll fix it right away!",
+"date": "2026-08-19T17:26:46+00:00",
+"url": "https://x.com/LenVGC/status/2090128352166264921",
+"media": [
+[
+"https://pbs.twimg.com/media/HQGgamgWMAETDU2.png?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HQGgcQxWkAAxUlF.png?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
