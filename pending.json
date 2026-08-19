@@ -1,42 +1,4 @@
 {
-"vgcvictoryroad|2090121614708854845": {
-"username": "VGCVictoryRoad",
-"tweets": [
-{
-"id": 2090121614708854845,
-"conv": "2090121614708854845",
-"text": "🚨 Sign-ups for the 🇫🇷 Nice Regional are now OPEN! #PlayPokemon #PokemonChampions\n\n📍 Nice, France\n🗓️ 17–18 Oct 2026\n🎫 €70 (MA), €40 (SR/JR)\n📝 Sign up:",
-"date": "2026-08-19T17:00:00+00:00",
-"url": "https://x.com/VGCVictoryRoad/status/2090121614708854845",
-"media": [
-[
-"https://pbs.twimg.com/media/HQE7U8jWcAAgPxe.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-19T17:44:16.887045+00:00"
-},
-"montana_pokemon|2090121620870312410": {
-"username": "Montana_Pokemon",
-"tweets": [
-{
-"id": 2090121620870312410,
-"conv": "2090121620870312410",
-"text": "i want to use astral barrage",
-"date": "2026-08-19T17:00:01+00:00",
-"url": "https://x.com/Montana_Pokemon/status/2090121620870312410",
-"media": [
-[
-"https://pbs.twimg.com/media/HQD3yIiaIAA0cYD.png?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-19T17:44:32.484771+00:00"
-},
 "lenvgc|2089457082659401730": {
 "username": "LenVGC",
 "tweets": [
@@ -58,7 +20,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-19T17:44:26.588128+00:00"
+"last_fetch": "2026-08-19T18:02:58.883462+00:00"
 },
 "bwentyvgc|2090124058226524195": {
 "username": "bwentyVGC",
@@ -78,5 +40,23 @@
 }
 ],
 "last_fetch": "2026-08-19T17:51:31.959982+00:00"
+},
+"lenvgc|2090133645914702121": {
+"username": "LenVGC",
+"tweets": [
+{
+"id": 2090133645914702121,
+"conv": "2090133645914702121",
+"text": "Me he registrado para mi primer Campeonato Regional de la siguiente temporada, en Niza 🇫🇷🏆. \n\nNo os hacéis a la idea del hype que tengo. \n\nComo vuelva Indeedee en la Regulación M-C, no vuelvo a perder otra final 😎.",
+"date": "2026-08-19T17:47:48+00:00",
+"url": "https://x.com/LenVGC/status/2090133645914702121",
+"media": [
+[
+"https://pbs.twimg.com/media/HQGkrXAWIAAqaH8.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
