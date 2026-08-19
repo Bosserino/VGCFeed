@@ -1,27 +1,4 @@
 {
-"lenvgc|2089457082659401730": {
-"username": "LenVGC",
-"tweets": [
-{
-"id": 2090128352166264921,
-"conv": "2089457082659401730",
-"text": "@BadassFroslass @MJessVGC Here is the original text. I realize the translation might be a bit confusing; I didn't notice that, in addition to translating from Spanish to English, the new EVs/stat points had been swapped for the old ones. Thanks for pointing that out, I'll fix it right away!",
-"date": "2026-08-19T17:26:46+00:00",
-"url": "https://x.com/LenVGC/status/2090128352166264921",
-"media": [
-[
-"https://pbs.twimg.com/media/HQGgamgWMAETDU2.png?name=large",
-"photo"
-],
-[
-"https://pbs.twimg.com/media/HQGgcQxWkAAxUlF.png?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-19T18:02:58.883462+00:00"
-},
 "bwentyvgc|2090124058226524195": {
 "username": "bwentyVGC",
 "tweets": [
@@ -57,7 +34,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-19T18:21:19.464406+00:00"
 },
 "kennethvgc21|2090136787888837106": {
 "username": "kennethvgc21",
