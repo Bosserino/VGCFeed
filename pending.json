@@ -1,23 +1,4 @@
 {
-"bwentyvgc|2090124058226524195": {
-"username": "bwentyVGC",
-"tweets": [
-{
-"id": 2090128744958595276,
-"conv": "2090124058226524195",
-"text": "@Splash2ndcousin Me when I challenge the Snowpoint City gym",
-"date": "2026-08-19T17:28:20+00:00",
-"url": "https://x.com/bwentyVGC/status/2090128744958595276",
-"media": [
-[
-"https://pbs.twimg.com/media/HQGhBDAWAAEeM0j.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-19T18:11:07.792822+00:00"
-},
 "lenvgc|2090133645914702121": {
 "username": "LenVGC",
 "tweets": [
@@ -53,6 +34,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-19T18:31:06.152449+00:00"
 }
 }
