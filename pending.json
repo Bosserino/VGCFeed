@@ -1,21 +1,20 @@
 {
-"lexiconvgc|2090166712889229423": {
-"username": "LexiconVGC",
+"riopaser|2090176912073113700": {
+"username": "riopaser",
 "tweets": [
 {
-"id": 2090166712889229423,
-"conv": "2090166712889229423",
-"text": "winner of the biggest tournament in history (right behind that one tournament that was bigger)",
-"date": "2026-08-19T19:59:12+00:00",
-"url": "https://x.com/LexiconVGC/status/2090166712889229423",
+"id": 2090176912073113700,
+"conv": "2090176912073113700",
+"text": "Ya encontré el emblema de Finalista de NAIC 🤦‍♂️",
+"date": "2026-08-19T20:39:44+00:00",
+"url": "https://x.com/riopaser/status/2090176912073113700",
 "media": [
 [
-"https://pbs.twimg.com/media/HQHDTRYb0AAgSaI.jpg?name=large",
-"photo"
+"https://video.twimg.com/amplify_video/2090176664336584704/vid/avc1/1080x1920/-AqOvrbwQ1Q6Lhbi.mp4?tag=29",
+"video"
 ]
 ]
 }
-],
-"last_fetch": "2026-08-19T20:39:20.046355+00:00"
+]
 }
 }
