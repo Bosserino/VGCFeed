@@ -15,7 +15,8 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-23T15:18:43.172211+00:00"
 },
 "juanfivgc|2091542519729307852": {
 "username": "JuanfiVGC",
@@ -30,6 +31,24 @@
 [
 "https://pbs.twimg.com/media/HQalgavXoAER9yX.jpg?name=large",
 "photo"
+]
+]
+}
+]
+},
+"lorcylovesyou|2091541783154987227": {
+"username": "lorcylovesyou",
+"tweets": [
+{
+"id": 2091541783154987227,
+"conv": "2091541783154987227",
+"text": "@Silverbroom100",
+"date": "2026-08-23T15:03:14+00:00",
+"url": "https://x.com/lorcylovesyou/status/2091541783154987227",
+"media": [
+[
+"https://video.twimg.com/tweet_video/HQamKhwXQAAvJAA.mp4",
+"video"
 ]
 ]
 }
