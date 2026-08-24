@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-24T12:31:09.705982+00:00"
+"last_fetch": "2026-08-24T12:51:00.809622+00:00"
 },
 "lenvgc|2091779674338668724": {
 "username": "LenVGC",
@@ -36,5 +36,23 @@
 }
 ],
 "last_fetch": "2026-08-24T12:31:35.695097+00:00"
+},
+"terasquareoffl|2091868275525505376": {
+"username": "TeraSquareOffl",
+"tweets": [
+{
+"id": 2091868275525505376,
+"conv": "2091868275525505376",
+"text": "🗓#テラスクエア Schedule🗓(JST)\n#94\n9/4 21:00~\n#95\n9/18\n#96\n9/25 21:00~\n※決勝Tは翌日曜日20時から行われます。\n\n9/11 は #テラスクオフ\n9/26 は #でゅおでゅお \n\n#ポケモンチャンピオンズ\n#ダブルバトル\n\n各大会の詳細はツリーを参照",
+"date": "2026-08-24T12:40:36+00:00",
+"url": "https://x.com/TeraSquareOffl/status/2091868275525505376",
+"media": [
+[
+"https://pbs.twimg.com/media/HQfPEmjaoAASha2.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
