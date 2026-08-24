@@ -1,42 +1,4 @@
 {
-"michaelderbeste|2091862088461197385": {
-"username": "MichaelDerbeste",
-"tweets": [
-{
-"id": 2091862088461197385,
-"conv": "2091862088461197385",
-"text": "Who is winning Worlds this year? I made a list of the 100 favourites. If you did not make the list, that's great. Underdog stories are always lovely and I genuinely think everyone is able to have a deep run this weekend!",
-"date": "2026-08-24T12:16:01+00:00",
-"url": "https://x.com/MichaelderBeste/status/2091862088461197385",
-"media": [
-[
-"https://pbs.twimg.com/media/HQfJexkXMAArwHu.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-24T12:51:00.809622+00:00"
-},
-"lenvgc|2091779674338668724": {
-"username": "LenVGC",
-"tweets": [
-{
-"id": 2091858500720767175,
-"conv": "2091779674338668724",
-"text": "@pokexperto Pyroar",
-"date": "2026-08-24T12:01:46+00:00",
-"url": "https://x.com/LenVGC/status/2091858500720767175",
-"media": [
-[
-"https://pbs.twimg.com/media/HQfGODwXEAAN84M.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-24T12:31:35.695097+00:00"
-},
 "terasquareoffl|2091868275525505376": {
 "username": "TeraSquareOffl",
 "tweets": [
@@ -53,6 +15,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-24T13:10:51.675105+00:00"
 }
 }
