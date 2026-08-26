@@ -16,7 +16,7 @@
 ]
 }
 ],
-"last_fetch": "2026-08-26T23:01:14.504251+00:00"
+"last_fetch": "2026-08-26T23:11:32.289876+00:00"
 },
 "platypusferri|2092740939768823965": {
 "username": "Platypusferri",
@@ -36,5 +36,23 @@
 }
 ],
 "last_fetch": "2026-08-26T23:01:25.164704+00:00"
+},
+"frpio_pero|2092750164918206757": {
+"username": "frpio_pero",
+"tweets": [
+{
+"id": 2092750164918206757,
+"conv": "2092750164918206757",
+"text": "Thank you @ValentineVGC_ for bringing out the kids to play :)",
+"date": "2026-08-26T23:04:55+00:00",
+"url": "https://x.com/frpio_pero/status/2092750164918206757",
+"media": [
+[
+"https://pbs.twimg.com/media/HQrxLT2XMAAruG8.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
