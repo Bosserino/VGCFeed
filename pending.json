@@ -40,5 +40,41 @@
 }
 ],
 "last_fetch": "2026-08-26T22:31:52.721282+00:00"
+},
+"shadeviera|2092742154716340702": {
+"username": "SHADEviera",
+"tweets": [
+{
+"id": 2092742154716340702,
+"conv": "2092742154716340702",
+"text": "街のトラックの遊び心がエグい！\n#ポケモンWCS2026",
+"date": "2026-08-26T22:33:05+00:00",
+"url": "https://x.com/SHADEviera/status/2092742154716340702",
+"media": [
+[
+"https://video.twimg.com/amplify_video/2092741937237520384/vid/avc1/1920x1080/9TthvOWjugRW8rFK.mp4?tag=29",
+"video"
+]
+]
+}
+]
+},
+"platypusferri|2092740939768823965": {
+"username": "Platypusferri",
+"tweets": [
+{
+"id": 2092740939768823965,
+"conv": "2092740939768823965",
+"text": "My precious!",
+"date": "2026-08-26T22:28:15+00:00",
+"url": "https://x.com/Platypusferri/status/2092740939768823965",
+"media": [
+[
+"https://pbs.twimg.com/media/HQropOeW0AA6EGI.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
