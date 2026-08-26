@@ -1,25 +1,20 @@
 {
-"ytpublic|2092493630850134395": {
-"username": "YTpublic",
+"ub_slow|2092505169909219630": {
+"username": "UB_SLOW",
 "tweets": [
 {
-"id": 2092493630850134395,
-"conv": "2092493630850134395",
-"text": "成田のスイートラウンジにいる",
-"date": "2026-08-26T06:05:32+00:00",
-"url": "https://x.com/YTpublic/status/2092493630850134395",
+"id": 2092505169909219630,
+"conv": "2092505169909219630",
+"text": "#新しいプロフィール画像",
+"date": "2026-08-26T06:51:24+00:00",
+"url": "https://x.com/UB_SLOW/status/2092505169909219630",
 "media": [
 [
-"https://pbs.twimg.com/media/HQoH1lbaAAAiTVR.jpg?name=large",
-"photo"
-],
-[
-"https://pbs.twimg.com/media/HQoH2uPbIAEeYcB.jpg?name=large",
+"https://pbs.twimg.com/media/HQoSXLvawAEJx2Z.jpg?name=large",
 "photo"
 ]
 ]
 }
-],
-"last_fetch": "2026-08-26T06:41:04.260273+00:00"
+]
 }
 }
