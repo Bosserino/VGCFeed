@@ -1,1 +1,24 @@
-{}
+{
+"spy_anya11|2092518565094285577": {
+"username": "SPY_Anya11",
+"tweets": [
+{
+"id": 2092518565094285577,
+"conv": "2092518565094285577",
+"text": "サンフランシスコ行ってきます！",
+"date": "2026-08-26T07:44:37+00:00",
+"url": "https://x.com/SPY_Anya11/status/2092518565094285577",
+"media": [
+[
+"https://pbs.twimg.com/media/HQoeiuSbQAAsKpn.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HQoeiuTaUAA9-6D.jpg?name=large",
+"photo"
+]
+]
+}
+]
+}
+}
