@@ -1,23 +1,4 @@
 {
-"ytpublic|2092487720451088831": {
-"username": "YTpublic",
-"tweets": [
-{
-"id": 2092487720451088831,
-"conv": "2092487720451088831",
-"text": "さあ、行こうか",
-"date": "2026-08-26T05:42:03+00:00",
-"url": "https://x.com/YTpublic/status/2092487720451088831",
-"media": [
-[
-"https://pbs.twimg.com/media/HQoCfW7bwAAc1VU.jpg?name=large",
-"photo"
-]
-]
-}
-],
-"last_fetch": "2026-08-26T06:22:15.984339+00:00"
-},
 "ytpublic|2092493630850134395": {
 "username": "YTpublic",
 "tweets": [
@@ -38,6 +19,7 @@
 ]
 ]
 }
-]
+],
+"last_fetch": "2026-08-26T06:41:04.260273+00:00"
 }
 }
