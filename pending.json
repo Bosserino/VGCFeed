@@ -16,6 +16,28 @@
 ]
 }
 ],
-"last_fetch": "2026-08-26T06:01:38.848636+00:00"
+"last_fetch": "2026-08-26T06:21:13.410718+00:00"
+},
+"ytpublic|2092493630850134395": {
+"username": "YTpublic",
+"tweets": [
+{
+"id": 2092493630850134395,
+"conv": "2092493630850134395",
+"text": "成田のスイートラウンジにいる",
+"date": "2026-08-26T06:05:32+00:00",
+"url": "https://x.com/YTpublic/status/2092493630850134395",
+"media": [
+[
+"https://pbs.twimg.com/media/HQoH1lbaAAAiTVR.jpg?name=large",
+"photo"
+],
+[
+"https://pbs.twimg.com/media/HQoH2uPbIAEeYcB.jpg?name=large",
+"photo"
+]
+]
+}
+]
 }
 }
